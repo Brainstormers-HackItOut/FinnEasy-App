@@ -47,7 +47,7 @@ abstract class _LoginStore with Store {
   Future<Widget> getHomeScreen(BuildContext context) async{
     bool login = await checkLogin(context);
     if(login){
-      return DashBoardScreen();
+      return const DashBoardScreen(index: 0,);
     }
     return const LoginScreen();
   }
@@ -103,7 +103,7 @@ abstract class _LoginStore with Store {
               backgroundColor: AppColors.success,
               icon: Icons.check
           );
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashBoardScreen()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashBoardScreen(index: 0,)));
           btnController.success();
         }
       });
@@ -146,7 +146,7 @@ abstract class _LoginStore with Store {
               backgroundColor: AppColors.success,
               icon: Icons.check
           );
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashBoardScreen()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashBoardScreen(index: 0,)));
           btnController.success();
         }
       });

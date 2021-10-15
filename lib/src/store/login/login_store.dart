@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:async';
+import 'dart:developer' as dev;
 import 'dart:math';
 
 // Flutter imports:
@@ -58,11 +59,12 @@ abstract class _LoginStore with Store {
     Map<String, dynamic> payload;
     try{
       payload = Jwt.parseJwt(authToken);
+      dev.log(payload.toString());
     }catch(e){
       return false;
     }
     if (payload['exp'] < DateTime.now().millisecondsSinceEpoch / 1000){
-      logout(context);
+      // logout(context);
     }
     return _sharedPreferenceHelper.isLoggedIn;
   }

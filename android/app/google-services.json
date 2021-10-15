@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "337594107551",
+    "project_id": "finneasy-b7d24",
+    "storage_bucket": "finneasy-b7d24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337594107551:android:b76d4738d90127ce9f84aa",
+        "android_client_info": {
+          "package_name": "com.fin.finneasy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337594107551-bdijscj5cls7h1epoov65b4fut92scrs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fin.finneasy",
+            "certificate_hash": "439be2e1662a978d53fc5a9e6fd4b76fbf6f5ff0"
+          }
+        },
+        {
+          "client_id": "337594107551-edodcr5lvgbnapb2c9l5r3ifieobjfts.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzxFfKn2T0KCPZkn-zDPTezWkMWnlqlTU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337594107551-edodcr5lvgbnapb2c9l5r3ifieobjfts.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

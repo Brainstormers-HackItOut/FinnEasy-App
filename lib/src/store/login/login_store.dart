@@ -6,6 +6,9 @@ import 'dart:math';
 // Flutter imports:
 import 'package:finneasy/resources/colors.dart';
 import 'package:finneasy/src/models/login/login_form.dart';
+import 'package:finneasy/src/models/login/login_response.dart';
+import 'package:finneasy/src/models/login/register_form.dart';
+import 'package:finneasy/src/models/user/user.dart' as user;
 import 'package:finneasy/src/ui/dashboard/dashboard.dart';
 import 'package:finneasy/src/ui/onboarding/login_screen.dart';
 import 'package:finneasy/src/ui/onboarding/otp_screen.dart';
@@ -13,6 +16,7 @@ import 'package:finneasy/src/ui/onboarding/password_screen.dart';
 import 'package:finneasy/src/ui/onboarding/register_screen.dart';
 import 'package:finneasy/src/utils/shared_preference_helper.dart';
 import 'package:finneasy/src/widget/flushbar.dart';
+import 'package:finneasy/src/widget/reward_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +25,8 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:mobx/mobx.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'login_api.dart';
 
 // Project imports:
 
@@ -78,11 +84,11 @@ abstract class _LoginStore with Store {
       btnController.reset();
     }
     else{
-      final form = LoginForm(mobile: mobile, password: password);
-      Object response;
+      final form = LoginForm(phoneNumber: mobile, password: password);
+      LoginResponse response;
       try{
-        response = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqYXZhaW51c2UiLCJleHAiOjE2MzQzMDg2MDYsImlhdCI6MTYzNDI5MDYwNn0.JdvV8NJFApbxGsZi0hmDI8NfdmaYz-VmTXhgsUfN7CjmuUCpg4PU9wgZUdeSzy40YO_etKuCM88JlS4e_YGbrQ";
-      }
+        response = await LoginApi.login(form);
+       }
       catch(e){
         btnController.error();
         showFlushBar(context, "Something went wrong. Please try again");
@@ -90,23 +96,36 @@ abstract class _LoginStore with Store {
         return;
       }
       Timer(const Duration(seconds: 2), () async{
-        if (response is Error){
+        _sharedPreferenceHelper.saveIsLoggedIn(true);
+        _sharedPreferenceHelper.saveAuthToken(response.token!);
+        bool auth = false;
+        try{
+          auth = await LoginApi.authCheck();
+        }
+        catch(e){
+          dev.log(e.toString());
           btnController.error();
-          showFlushBar(context, response.toString());
+          showFlushBar(context, "Something went wrong. Please try again");
           btnController.reset();
           return;
         }
-        else if (response is String){
-          _sharedPreferenceHelper.saveIsLoggedIn(true);
-          _sharedPreferenceHelper.saveAuthToken(response);
-          showFlushBar(
+        if (auth) {
+          showFlushBar(context, "Login Successfully",
+              backgroundColor: AppColors.success, icon: Icons.check);
+          Navigator.pushAndRemoveUntil(
               context,
-              "Login Successfully",
-              backgroundColor: AppColors.success,
-              icon: Icons.check
-          );
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashBoardScreen(index: 0,)));
+              MaterialPageRoute(
+                  builder: (context) => const DashBoardScreen(
+                    index: 0,
+                  )),
+                  (Route<dynamic> route) => route.isFirst);
+          showRewardDialog(context, 100);
           btnController.success();
+        } else{
+          btnController.error();
+          showFlushBar(context, "Password Incorrect. Please try again");
+          btnController.reset();
+          return;
         }
       });
     }
@@ -121,10 +140,23 @@ abstract class _LoginStore with Store {
       btnController.reset();
     }
     else{
-      final form = LoginForm(mobile: mobile, password: password);
-      Object response;
+      final registerForm = RegisterForm(
+          phoneNumber: mobile,
+          password: password,
+          emailId: email,
+          firstName: username.split(" ")[0],
+          lastName: username.split(" ")[1]
+      );
+      final loginForm = LoginForm(
+          phoneNumber: mobile,
+          password: password,
+      );
+      LoginResponse response;
       try{
-        response = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqYXZhaW51c2UiLCJleHAiOjE2MzQzMDg2MDYsImlhdCI6MTYzNDI5MDYwNn0.JdvV8NJFApbxGsZi0hmDI8NfdmaYz-VmTXhgsUfN7CjmuUCpg4PU9wgZUdeSzy40YO_etKuCM88JlS4e_YGbrQ";
+        dev.log(registerForm.toString());
+        user.User userResponse = await LoginApi.register(registerForm);
+        dev.log(userResponse.toString());
+        response = await LoginApi.login(loginForm);
       }
       catch(e){
         btnController.error();
@@ -133,24 +165,19 @@ abstract class _LoginStore with Store {
         return;
       }
       Timer(const Duration(seconds: 2), () async{
-        if (response is Error){
-          btnController.error();
-          showFlushBar(context, response.toString());
-          btnController.reset();
-          return;
-        }
-        else if (response is String){
           _sharedPreferenceHelper.saveIsLoggedIn(true);
-          _sharedPreferenceHelper.saveAuthToken(response);
-          showFlushBar(
-              context,
-              "Login Successfully",
-              backgroundColor: AppColors.success,
-              icon: Icons.check
-          );
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DashBoardScreen(index: 0,)));
-          btnController.success();
-        }
+          _sharedPreferenceHelper.saveAuthToken(response.token!);
+            showFlushBar(context, "Login Successfully",
+                backgroundColor: AppColors.success, icon: Icons.check);
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const DashBoardScreen(
+                          index: 0,
+                        )),
+                (Route<dynamic> route) => route.isFirst);
+            showRewardDialog(context, 100);
+            btnController.success();
       });
     }
   }

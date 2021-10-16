@@ -68,20 +68,16 @@ class _OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin
               backgroundColor: Theme.of(context).backgroundColor,
               key: _orderStore.scaffoldKey,
               appBar: Appbar(
-                title: _orderStore.shouldShow ? _orderStore.greetingMessage : "",
-                leadingIcon: const Icon(Icons.account_circle_outlined),
-                leadingFunction: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen())),
-                trailingIcon: const Icon(Icons.notifications),
-                trailingFunction: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationScreen()))
-                ,
+                title: "Order",
               ),
               body: ObserverNetworkState(
                 networkState: _orderStore.isLoading,
                 taskToBeDone: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    SizedBox(
+                      height: screenHeight * 0.025,
+                    ),
                     Container(
                       alignment: Alignment.topLeft,
                       width: screenWidth * 0.95,

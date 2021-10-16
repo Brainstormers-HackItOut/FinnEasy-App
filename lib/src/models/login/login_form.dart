@@ -6,16 +6,16 @@ import '../model_utilities.dart';
 
 class LoginForm {
   LoginForm({
-    required this.mobile,
+    required this.phoneNumber,
     required this.password,
   });
 
   factory LoginForm.fromJson(Map<String, dynamic> jsonRes) => LoginForm(
-    mobile: asT<String>(jsonRes['mobile'])!,
+    phoneNumber: asT<String>(jsonRes['phoneNumber'])!,
     password: asT<String>(jsonRes['password'])!,
   );
 
-  String mobile;
+  String phoneNumber;
   String password;
 
   @override
@@ -24,7 +24,7 @@ class LoginForm {
   }
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'mobile': mobile,
+    'phoneNumber': phoneNumber,
     'password': password,
   };
 

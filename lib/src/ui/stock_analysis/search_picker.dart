@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:finneasy/resources/colors.dart';
+import 'package:finneasy/src/ui/stock_analysis/model/stock_search.dart';
 import 'package:finneasy/src/ui/stock_analysis/store/stock_store.dart';
 import 'package:finneasy/src/ui/stock_analysis/widget/stock_purchase_bottom_sheet.dart';
 import 'package:finneasy/src/widget/appbar.dart';
@@ -21,7 +24,7 @@ class _SearchPickerState extends State<SearchPicker> {
   String pattern = "";
   final TextEditingController _typeAheadController1 = TextEditingController();
 
-  // Product currentSearch;
+  List<StockSearch> currentSearch = [];
 
   @override
   void initState() {
@@ -65,17 +68,20 @@ class _SearchPickerState extends State<SearchPicker> {
             ),
             child: Card(
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)
+                  borderRadius: BorderRadius.circular(15),
               ),
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).backgroundColor,
+                  ),
                   child: TextField(
                     autofocus: true,
                     decoration:InputDecoration(
                         border: InputBorder.none,
                         hintText: "Enter company name",
                         hintStyle: TextStyle(
-                            color: AppColors.primaryColor,
+                            color: AppColors.white,
                             fontSize: 18
                         )
                     ),
@@ -89,51 +95,62 @@ class _SearchPickerState extends State<SearchPicker> {
               ),
             ),
           ),
-          // FutureBuilder(
-          //   future: pattern.length < 4 ? null : StockApi.searchStock(pattern),
-          //   builder: (context, snapshot) => pattern.length < 4 ? Container() :
-          //   snapshot.hasData ? Expanded(
-          //       child: ListView.builder(
-          //         itemBuilder: (context, index) => GestureDetector(
-          //           onTap: () {
-          //             setState(() {
-          //               currentSearch = snapshot.data![index];
-          //             });
-          //             print(currentSearch);
-          //             Navigator.push(context, MaterialPageRoute(builder: (context) => WebPageView(
-          //               title: snapshot.data![index].name,
-          //               url: "https://in.tradingview.com/chart/?symbol=NSE%3A" + snapshot.data![index].name,
-          //               icon: const Icon(Icons.shopping_bag_outlined),
-          //               function: (){
-          //                 showModalBottomSheet<dynamic>(
-          //                   isScrollControlled: true,
-          //                   context: context,
-          //                   elevation: 1.0,
-          //                   backgroundColor: Colors.transparent,
-          //                   builder: (buildContext) {
-          //                     return ShoppingBottomSheet(store: widget.store, stockname: snapshot.data![index].name,);
-          //                   },
-          //                 );
-          //               },
-          //             )));
-          //           },
-          //           child: Container(
-          //               padding: EdgeInsets.all(15),
-          //               child: Text(snapshot.data![index].name,
-          //                   style: TextStyle(
-          //                       fontSize: 16
-          //                   )
-          //               )
-          //           ),
-          //         ),
-          //         itemCount: snapshot.data!.length,
-          //       )
-          //   ) : const Center(
-          //     child: CircularProgressIndicator(
-          //       color: AppColors.primaryColor,
-          //     ),
-          //   ),
-          // )
+          FutureBuilder(
+            future: pattern.length < 4 ? null : StockApi.searchStock(pattern),
+            builder: (context, snapshot) {
+              if (snapshot.data != null){
+                    currentSearch = (snapshot.data as List<StockSearch>);
+              }
+
+              return pattern.length < 4 ? Container() :
+              snapshot.hasData ? Expanded(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) =>
+                        GestureDetector(
+                          onTap: () {
+                            log(currentSearch[index].toString());
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context) =>
+                                    WebPageView(
+                                      title: currentSearch[index].nameOfCompany!,
+                                      url: "https://in.tradingview.com/chart/?symbol=NSE%3A" +
+                                          currentSearch[index].symbol!,
+                                      icon: const Icon(
+                                          Icons.shopping_bag_outlined),
+                                      function: () {
+                                        showModalBottomSheet<dynamic>(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          elevation: 1.0,
+                                          backgroundColor: Colors.transparent,
+                                          builder: (buildContext) {
+                                            return ShoppingBottomSheet(
+                                              store: widget.store,
+                                              stockname: currentSearch[index]
+                                                  .nameOfCompany!,);
+                                          },
+                                        );
+                                      },
+                                    )));
+                          },
+                          child: Container(
+                              padding: EdgeInsets.all(15),
+                              child: Text(currentSearch[index].nameOfCompany!,
+                                  style: TextStyle(
+                                      fontSize: 16
+                                  )
+                              )
+                          ),
+                        ),
+                    itemCount: currentSearch.length,
+                  )
+              ) : const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColor,
+                ),
+              );
+            }
+          )
         ],
       ),
     );

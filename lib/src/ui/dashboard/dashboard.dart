@@ -21,40 +21,40 @@ class DashBoardScreen extends StatefulWidget {
 class _DashBoardScreenState extends State<DashBoardScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey _bottomNavigationKey = GlobalKey();
-  final telephony = Telephony.instance;
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
     initialise();
   }
 
-  Future<void> initPlatformState() async {
-
-    final bool? result = await telephony.requestPhoneAndSmsPermissions;
-
-    if (result != null && result) {
-      log("Getting Messages");
-      List<SmsMessage> messages = await telephony.getInboxSms(
-          columns: [SmsColumn.ADDRESS, SmsColumn.BODY],
-          filter: SmsFilter
-              .where(SmsColumn.BODY)
-              .like("%debit%")
-              .or(SmsColumn.BODY)
-              .like("%credit%")
-      );
-    }
-  }
+  late List<Widget> _widgetOptions = [];
 
   int _selectedIndex = 0;
   void initialise() async {
+    _widgetOptions = [HomeScreen(), StockMarketScreen(), RewardsScreen(), OrderScreen(), SettingScreen()];
     _selectedIndex = widget.index;
   }
 
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black);
-  final List<Widget> _widgetOptions = const [HomeScreen(), StockMarketScreen(), RewardsScreen(), OrderScreen(), SettingScreen()];
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+      context: context,
+      builder: (context) =>  AlertDialog(
+        title:  const Text('Are you sure?'),
+        content: const Text('Do you want to exit the App'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    )) ?? false;
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -64,29 +64,32 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      body: Center(
-        child:  _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: CurvedNavigationBar(
-        key: _bottomNavigationKey,
-        index: widget.index,
-        height: 50.0,
-        color: Colors.white,
-        buttonBackgroundColor: Colors.white,
-        backgroundColor: Colors.blueAccent,
-        animationCurve: Curves.easeInOut,
-        animationDuration: const Duration(milliseconds: 400),
-        letIndexChange: (index) => true,
-        items: const <Widget>[
-          Icon(Icons.home_outlined),
-          Icon(Icons.search),
-          Icon(Icons.local_offer_outlined),
-          Icon(Icons.shopping_cart_outlined),
-          Icon(Icons.settings)
-        ],
-        onTap: _onItemTapped,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        key: _scaffoldKey,
+        body: Center(
+          child:  _widgetOptions.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: CurvedNavigationBar(
+          key: _bottomNavigationKey,
+          index: widget.index,
+          height: 50.0,
+          color: Theme.of(context).bottomAppBarColor,
+          buttonBackgroundColor: Theme.of(context).focusColor,
+          backgroundColor: Theme.of(context).backgroundColor,
+          animationCurve: Curves.easeInOut,
+          animationDuration: const Duration(milliseconds: 400),
+          letIndexChange: (index) => true,
+          items: const <Widget>[
+            Icon(Icons.home_outlined),
+            Icon(Icons.search),
+            Icon(Icons.local_offer_outlined),
+            Icon(Icons.shopping_cart_outlined),
+            Icon(Icons.settings)
+          ],
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }

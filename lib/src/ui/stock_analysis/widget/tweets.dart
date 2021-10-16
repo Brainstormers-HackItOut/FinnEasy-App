@@ -1,10 +1,11 @@
 // Flutter imports:
 import 'package:finneasy/resources/colors.dart';
+import 'package:finneasy/src/ui/stock_analysis/model/stock_tweets.dart';
 import 'package:flutter/material.dart';
 
 
 class Tweets extends StatelessWidget {
-  final List<dynamic> tweets;
+  final StockTweets tweets;
 
   const Tweets({Key? key, required this.tweets}) : super(key: key);
 
@@ -18,8 +19,7 @@ class Tweets extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-
-          for (int i =0; i< 10; i++)
+          for (int i =0; i < tweets.twList!.length ; i++)
               Container(
                 width: screenWidth * 0.9,
                 margin: EdgeInsets.only(top: screenHeight * 0.01, bottom: screenHeight * 0.02),
@@ -39,30 +39,12 @@ class Tweets extends StatelessWidget {
                   ]
               ),
               child: ListTile(
-                leading: CircleAvatar(
-                  child: Text(
-                    "AT"
-                  )
-                ),
-                trailing: Icon(
-                  Icons.thumb_up_sharp,
-                  color: Theme.of(context).primaryColor,
-                  size: screenWidth * 0.05,
-                ),
                 title: Text(
-                  "Ajinkya Taranekar",
+                  tweets.twList![i],
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontSize: screenWidth * 0.05,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle:Text(
-                  "Today will be a good deal with Tata, buy maximum stocks.",
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontSize: screenWidth * 0.04,
-                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ),

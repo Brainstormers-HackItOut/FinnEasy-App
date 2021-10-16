@@ -60,23 +60,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: Column(
                   children: <Widget>[
                     SizedBox(
-                      height: screenHeight*0.1,
-                    ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                          width: 100,
-                          height: 100,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("assets/images/logo.png"),
-                                fit: BoxFit.cover,
-                                alignment: Alignment.topCenter),
-                          ),
-                          child: null
-                      ),
-                    ),
-                    SizedBox(
                       height: screenHeight*0.05,
                     ),
                     Row(
@@ -84,10 +67,13 @@ class _SplashScreenState extends State<SplashScreen> {
                       children: <Widget>[
                         const Padding(
                           padding: EdgeInsets.only(left: 10, bottom: 5, right: 5),
-                          child: Icon(
-                            Icons.monetization_on_outlined,
-                            size: 40,
-                            color: AppColors.white,
+                          child: CircleAvatar(
+                            radius: 50,
+                            child: Image(
+                                image: AssetImage("assets/images/logo.png"),
+                                fit: BoxFit.cover,
+                                alignment: Alignment.topCenter
+                            ),
                           ),
                         ),
                         Padding(

@@ -24,9 +24,10 @@ class ShoppingBottomSheet extends StatelessWidget {
     screenHeight = size.height;
     screenWidth = size.width;
 
-    return Wrap(
-      children: [
-        Container(
+    return BottomSheet(
+      onClosing: () {  },
+      builder: (BuildContext context) {
+        return Container(
             decoration: BoxDecoration(
                 color: AppColors.primaryColor.withOpacity(0.9),
                 borderRadius: const BorderRadius.only(
@@ -42,8 +43,8 @@ class ShoppingBottomSheet extends StatelessWidget {
                   );
                 }
             )
-        ),
-      ],
+        );
+      },
     );
   }
 
@@ -60,7 +61,7 @@ class ShoppingBottomSheet extends StatelessWidget {
           Flexible(
             flex: 1,
             child: Text(
-              '${store.buyorsell} THIS',
+              '${store.tweets.twPol} THIS',
               style: TextStyle(
                 color: AppColors.primaryColor,
                 fontSize: screenWidth * 0.063,

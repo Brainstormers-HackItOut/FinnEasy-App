@@ -70,9 +70,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               key: _homeStore.scaffoldKey,
               appBar: Appbar(
                 title: _homeStore.shouldShow ? _homeStore.greetingMessage : "",
-                leadingIcon: const Icon(Icons.account_circle_outlined),
-                leadingFunction: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen())),
                 trailingIcon: const Icon(Icons.notifications),
                 trailingFunction: () =>
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationScreen()))

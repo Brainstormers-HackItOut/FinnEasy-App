@@ -129,41 +129,37 @@ mixin _$StockStore on _StockStore, Store {
     });
   }
 
-  final _$buyorsellAtom = Atom(name: '_StockStore.buyorsell');
-
-  @override
-  String get buyorsell {
-    _$buyorsellAtom.reportRead();
-    return super.buyorsell;
-  }
-
-  @override
-  set buyorsell(String value) {
-    _$buyorsellAtom.reportWrite(value, super.buyorsell, () {
-      super.buyorsell = value;
-    });
-  }
-
   final _$tweetsAtom = Atom(name: '_StockStore.tweets');
 
   @override
-  List<dynamic> get tweets {
+  StockTweets get tweets {
     _$tweetsAtom.reportRead();
     return super.tweets;
   }
 
   @override
-  set tweets(List<dynamic> value) {
+  set tweets(StockTweets value) {
     _$tweetsAtom.reportWrite(value, super.tweets, () {
       super.tweets = value;
     });
   }
 
-  final _$refreshStockAsyncAction = AsyncAction('_StockStore.refreshStock');
+  final _$stockTweetAnalysisAsyncAction =
+      AsyncAction('_StockStore.stockTweetAnalysis');
 
   @override
-  Future<void> refreshStock() {
-    return _$refreshStockAsyncAction.run(() => super.refreshStock());
+  Future<void> stockTweetAnalysis(String query) {
+    return _$stockTweetAnalysisAsyncAction
+        .run(() => super.stockTweetAnalysis(query));
+  }
+
+  final _$cashFlowAnalysisAsyncAction =
+      AsyncAction('_StockStore.cashFlowAnalysis');
+
+  @override
+  Future<void> cashFlowAnalysis(List<Map<String, dynamic>> messages) {
+    return _$cashFlowAnalysisAsyncAction
+        .run(() => super.cashFlowAnalysis(messages));
   }
 
   final _$buyAsyncAction = AsyncAction('_StockStore.buy');
@@ -191,7 +187,6 @@ totalnumofshare: ${totalnumofshare},
 sharesbought: ${sharesbought},
 high: ${high},
 low: ${low},
-buyorsell: ${buyorsell},
 tweets: ${tweets}
     ''';
   }

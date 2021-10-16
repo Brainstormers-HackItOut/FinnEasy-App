@@ -43,6 +43,22 @@ class SharedPreferenceHelper {
     return _sharedPreference.remove(Strings.UID);
   }
 
+  // User ID: ----------------------------------------------------------
+  Future<int> get userId async {
+    _sharedPreference = await SharedPreferences.getInstance();
+    return _sharedPreference.getInt(Strings.USER_ID) ?? 0;
+  }
+
+  Future<bool> saveUserId(int userId) async {
+    _sharedPreference = await SharedPreferences.getInstance();
+    return _sharedPreference.setInt(Strings.USER_ID, userId);
+  }
+
+  Future<bool> removeUserId() async {
+    _sharedPreference = await SharedPreferences.getInstance();
+    return _sharedPreference.remove(Strings.USER_ID);
+  }
+
   // Login:---------------------------------------------------------------------
   Future<bool> get isLoggedIn async {
     _sharedPreference = await SharedPreferences.getInstance();

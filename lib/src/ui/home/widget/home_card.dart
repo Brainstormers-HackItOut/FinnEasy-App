@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'package:finneasy/resources/colors.dart';
 import 'package:finneasy/src/core/network_state/network_state.dart';
+import 'package:finneasy/src/ui/home/store/home_store.dart';
 import 'package:finneasy/src/widget/observer_network_state.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,9 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 class HomeCard extends StatefulWidget {
-  const HomeCard({Key? key}) : super(key: key);
+  final HomeStore store;
+
+  const HomeCard({Key? key, required this.store}) : super(key: key);
 
 
   @override
@@ -43,57 +46,50 @@ class _HomeCardState extends State<HomeCard>{
           ),
         ]
       ),
-      child: Observer(
-        builder: (context) {
-          return ObserverNetworkState(
-            networkState: NetworkState.completed,
-            taskToBeDone: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 10, left: 10, bottom: 5, right: 5),
-                  child: RichText(
-                    text: TextSpan(
-                      semanticsLabel: "name",
-                      text: "Hello, \n",
-                      style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 0.07 * screenWidth,
-                          fontWeight: FontWeight.bold
-                        ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: ("Ajinkya Taranekar") + ' 👋\n',
-                          style: TextStyle(
-                            color: AppColors.white,
-                            fontSize: 0.06 * screenWidth,
-                            fontWeight: FontWeight.w400
-                          ),
-                        )
-                      ],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 10, left: 10, bottom: 5, right: 5),
+            child: RichText(
+              text: TextSpan(
+                semanticsLabel: "name",
+                text: "Hello, \n",
+                style: TextStyle(
+                    color: AppColors.white,
+                    fontSize: 0.07 * screenWidth,
+                    fontWeight: FontWeight.bold
+                  ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: (widget.store.user.firstName.toString()) + " " + (widget.store.user.lastName.toString()) +  ' 👋\n',
+                    style: TextStyle(
+                      color: AppColors.white,
+                      fontSize: 0.06 * screenWidth,
+                      fontWeight: FontWeight.w400
                     ),
                   )
-                ),
-                SizedBox(
-                  width: screenWidth * 0.05,
-                ),
-                Text(
-                  "${500} coins",
-                  style: TextStyle(
-                      color: AppColors.white,
-                      fontSize: 0.04 * screenWidth,
-                      fontWeight: FontWeight.w400
-                  ),
-                ),
-                Icon(
-                  Icons.monetization_on,
-                  color: AppColors.white,
-                )
-              ],
+                ],
+              ),
             )
-          );
-        }
-      ), 
+          ),
+          SizedBox(
+            width: screenWidth * 0.05,
+          ),
+          Text(
+            "${500} coins",
+            style: TextStyle(
+                color: AppColors.white,
+                fontSize: 0.04 * screenWidth,
+                fontWeight: FontWeight.w400
+            ),
+          ),
+          Icon(
+            Icons.monetization_on,
+            color: AppColors.white,
+          )
+        ],
+      )
     );
   }
 }

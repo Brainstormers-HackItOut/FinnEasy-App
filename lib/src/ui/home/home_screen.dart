@@ -3,7 +3,9 @@ import 'dart:async';
 
 // Flutter imports:
 import 'package:finneasy/src/ui/error/error_screen.dart';
+import 'package:finneasy/src/ui/home/model/blog_response.dart';
 import 'package:finneasy/src/ui/home/store/home_store.dart';
+import 'package:finneasy/src/ui/home/widget/blog_create_alert.dart';
 import 'package:finneasy/src/ui/home/widget/fweets.dart';
 import 'package:finneasy/src/ui/home/widget/home_card.dart';
 import 'package:finneasy/src/ui/home/widget/news.dart';
@@ -68,6 +70,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           return Scaffold(
               backgroundColor: Theme.of(context).backgroundColor,
               key: _homeStore.scaffoldKey,
+              floatingActionButton: FloatingActionButton(
+                onPressed: () async{
+                  await showDialog(
+                      context: context,
+                      builder: (context) =>  BlogCreateForm(store: _homeStore));
+                },
+                child: Icon(
+                  Icons.add
+                ),
+              ),
               appBar: Appbar(
                 title: _homeStore.shouldShow ? _homeStore.greetingMessage : "",
                 trailingIcon: const Icon(Icons.notifications),
@@ -81,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        HomeCard(),
+                        HomeCard(store: _homeStore,),
                         SizedBox(
                           height: screenHeight * 0.05,
                         ),
@@ -130,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           child: TabBarView(
                             controller: _tabController,
                             children: [
-                              Fweets(),
+                              Fweets(blogs: _homeStore.blog, store: _homeStore,),
                               News(news: _homeStore.news)
                             ],
                           ),

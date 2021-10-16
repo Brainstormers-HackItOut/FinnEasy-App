@@ -1,10 +1,14 @@
 // Flutter imports:
 import 'package:finneasy/resources/colors.dart';
+import 'package:finneasy/src/ui/home/model/blog_response.dart';
+import 'package:finneasy/src/ui/home/store/home_store.dart';
 import 'package:flutter/material.dart';
 
 
 class Fweets extends StatelessWidget {
-  const Fweets({Key? key}) : super(key: key);
+  final List<BlogResponse> blogs;
+  final HomeStore store;
+  const Fweets({Key? key, required this.blogs, required this.store}) : super(key: key);
 
 
   @override
@@ -17,7 +21,7 @@ class Fweets extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
 
-          for (int i =0; i< 10; i++)
+          for (int i =0; i< blogs.length; i++)
               Container(
                 width: screenWidth * 0.9,
                 margin: EdgeInsets.only(top: screenHeight * 0.01, bottom: screenHeight * 0.02),
@@ -39,16 +43,21 @@ class Fweets extends StatelessWidget {
               child: ListTile(
                 leading: CircleAvatar(
                   child: Text(
-                    "AT"
+                      blogs[i].publisher!.split(" ")[0][0].toUpperCase() + blogs[i].publisher!.split(" ")[1][0].toUpperCase()
                   )
                 ),
-                trailing: Icon(
-                  Icons.thumb_up_sharp,
-                  color: Theme.of(context).primaryColor,
-                  size: screenWidth * 0.05,
+                trailing: IconButton(
+                  onPressed: (){
+                    store.likeDislike(context, i, blogs[i].id!);
+                  },
+                  icon: Icon(
+                    store.blogLikeDislike[i] ? Icons.thumb_up_alt_outlined : Icons.thumb_down_alt_outlined,
+                    color: store.blogLikeDislike[i] ? AppColors.error : AppColors.grey,
+                    size: screenWidth * 0.05,
+                  ),
                 ),
                 title: Text(
-                  "Ajinkya Taranekar",
+                  blogs[i].title!,
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontSize: screenWidth * 0.05,
@@ -56,7 +65,7 @@ class Fweets extends StatelessWidget {
                   ),
                 ),
                 subtitle:Text(
-                  "Today will be a good deal with Tata, buy maximum stocks.",
+                  "By - " + blogs[i].publisher! + "\n" + blogs[i].body!,
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontSize: screenWidth * 0.04,

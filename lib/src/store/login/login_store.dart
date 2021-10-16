@@ -119,7 +119,6 @@ abstract class _LoginStore with Store {
                     index: 0,
                   )),
                   (Route<dynamic> route) => route.isFirst);
-          showRewardDialog(context, 100);
           btnController.success();
         } else{
           btnController.error();
@@ -152,9 +151,10 @@ abstract class _LoginStore with Store {
           password: password,
       );
       LoginResponse response;
+      user.User userResponse;
       try{
         dev.log(registerForm.toString());
-        user.User userResponse = await LoginApi.register(registerForm);
+        userResponse = await LoginApi.register(registerForm);
         dev.log(userResponse.toString());
         response = await LoginApi.login(loginForm);
       }
@@ -176,7 +176,7 @@ abstract class _LoginStore with Store {
                           index: 0,
                         )),
                 (Route<dynamic> route) => route.isFirst);
-            showRewardDialog(context, 100);
+            showRewardDialog(context, userResponse.totalRewards!);
             btnController.success();
       });
     }

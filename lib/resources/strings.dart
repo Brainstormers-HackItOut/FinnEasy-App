@@ -14,4 +14,5 @@ class Strings {
   static const String AUTH_TOKEN = "authToken";
   static const String IS_DARK_MODE = "is_dark_mode";
   static const String UID = "uid";
+  static const String USER_ID = "user_id";
 }

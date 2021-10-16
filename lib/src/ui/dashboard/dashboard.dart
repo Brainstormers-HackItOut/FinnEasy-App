@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:finneasy/src/ui/home/home_screen.dart';
 import 'package:finneasy/src/ui/more/setting_screen.dart';
@@ -5,6 +7,7 @@ import 'package:finneasy/src/ui/orders/order_screen.dart';
 import 'package:finneasy/src/ui/rewards/rewards_screen.dart';
 import 'package:finneasy/src/ui/stock_analysis/stock_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:telephony/telephony.dart';
 
 class DashBoardScreen extends StatefulWidget {
   final int index;
@@ -18,12 +21,30 @@ class DashBoardScreen extends StatefulWidget {
 class _DashBoardScreenState extends State<DashBoardScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey _bottomNavigationKey = GlobalKey();
-  late String firstName;
+  final telephony = Telephony.instance;
 
   @override
   void initState() {
     super.initState();
+    initPlatformState();
     initialise();
+  }
+
+  Future<void> initPlatformState() async {
+
+    final bool? result = await telephony.requestPhoneAndSmsPermissions;
+
+    if (result != null && result) {
+      log("Getting Messages");
+      List<SmsMessage> messages = await telephony.getInboxSms(
+          columns: [SmsColumn.ADDRESS, SmsColumn.BODY],
+          filter: SmsFilter
+              .where(SmsColumn.BODY)
+              .like("%debit%")
+              .or(SmsColumn.BODY)
+              .like("%credit%")
+      );
+    }
   }
 
   int _selectedIndex = 0;

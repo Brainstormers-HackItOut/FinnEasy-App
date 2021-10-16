@@ -69,6 +69,21 @@ mixin _$HomeStore on _HomeStore, Store {
     });
   }
 
+  final _$newsAtom = Atom(name: '_HomeStore.news');
+
+  @override
+  FinNews get news {
+    _$newsAtom.reportRead();
+    return super.news;
+  }
+
+  @override
+  set news(FinNews value) {
+    _$newsAtom.reportWrite(value, super.news, () {
+      super.news = value;
+    });
+  }
+
   final _$refreshHomeAsyncAction = AsyncAction('_HomeStore.refreshHome');
 
   @override
@@ -91,7 +106,8 @@ mixin _$HomeStore on _HomeStore, Store {
 data: ${data},
 shouldShow: ${shouldShow},
 greetingMessage: ${greetingMessage},
-isLoading: ${isLoading}
+isLoading: ${isLoading},
+news: ${news}
     ''';
   }
 }

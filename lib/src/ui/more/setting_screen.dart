@@ -112,7 +112,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   SettingsDivider(dividerTitle: "OTHERS"),
                   GestureDetector(
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ReferralScreen()))
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ReferralScreen(referral: _homeStore.user.referralCode.toString())))
                       , child: InformationCell(
                     heading: "Refer",
                     content: "Invite your Friends",

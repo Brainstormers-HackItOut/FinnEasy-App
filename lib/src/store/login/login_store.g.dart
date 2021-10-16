@@ -24,6 +24,22 @@ mixin _$LoginStore on _LoginStore, Store {
     });
   }
 
+
+  final _$kycAtom = Atom(name: '_LoginStore.kyc');
+
+  @override
+  bool get kyc {
+    _$kycAtom.reportRead();
+    return super.kyc;
+  }
+
+  @override
+  set kyc(bool value) {
+    _$kycAtom.reportWrite(value, super.kyc, () {
+      super.kyc = value;
+    });
+  }
+
   final _$getHomeScreenAsyncAction = AsyncAction('_LoginStore.getHomeScreen');
 
   @override
@@ -36,6 +52,15 @@ mixin _$LoginStore on _LoginStore, Store {
   @override
   Future<bool> checkLogin(BuildContext context) {
     return _$checkLoginAsyncAction.run(() => super.checkLogin(context));
+  }
+
+  final _$uploadAadharAsyncAction = AsyncAction('_LoginStore.uploadAadhar');
+
+  @override
+  Future uploadAadhar(
+      BuildContext context, TextEditingController aadharController) {
+    return _$uploadAadharAsyncAction
+        .run(() => super.uploadAadhar(context, aadharController));
   }
 
   final _$loginAsyncAction = AsyncAction('_LoginStore.login');
@@ -59,9 +84,16 @@ mixin _$LoginStore on _LoginStore, Store {
       TextEditingController passwordController,
       String username,
       String email,
+      TextEditingController referralController,
       RoundedLoadingButtonController btnController) {
     return _$registerAsyncAction.run(() => super.register(
-        context, mobile, passwordController, username, email, btnController));
+        context,
+        mobile,
+        passwordController,
+        username,
+        email,
+        referralController,
+        btnController));
   }
 
   final _$logoutAsyncAction = AsyncAction('_LoginStore.logout');
@@ -74,7 +106,7 @@ mixin _$LoginStore on _LoginStore, Store {
   final _$retryAsyncAction = AsyncAction('_LoginStore.retry');
 
   @override
-  Future retry(BuildContext context, String mobile) {
+  Future<void> retry(BuildContext context, String mobile) {
     return _$retryAsyncAction.run(() => super.retry(context, mobile));
   }
 
@@ -94,7 +126,8 @@ mixin _$LoginStore on _LoginStore, Store {
   @override
   String toString() {
     return '''
-currentTime: ${currentTime}
+currentTime: ${currentTime},
+kyc: ${kyc}
     ''';
   }
 }

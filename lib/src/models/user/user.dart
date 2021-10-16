@@ -7,37 +7,37 @@ import '../model_utilities.dart';
 class User {
   User({
     this.id,
-    this.emailId,
+    this.phoneNumber,
     this.firstName,
     this.lastName,
+    this.emailId,
+    this.referralCode,
+    this.totalRewards,
     this.milestoneCounter,
     this.milestoneNumber,
-    this.password,
-    this.phoneNumber,
-    this.totalRewards,
   });
 
   factory User.fromJson(Map<String, dynamic> jsonRes) => User(
-    emailId: asT<String?>(jsonRes['emailId']),
+    id: asT<int?>(jsonRes['id']),
+    phoneNumber: asT<String?>(jsonRes['phoneNumber']),
     firstName: asT<String?>(jsonRes['firstName']),
     lastName: asT<String?>(jsonRes['lastName']),
+    emailId: asT<String?>(jsonRes['emailId']),
+    referralCode: asT<String?>(jsonRes['referralCode']),
+    totalRewards: asT<int?>(jsonRes['totalRewards']),
     milestoneCounter: asT<int?>(jsonRes['milestoneCounter']),
     milestoneNumber: asT<int?>(jsonRes['milestoneNumber']),
-    password: asT<String?>(jsonRes['password']),
-    phoneNumber: asT<String?>(jsonRes['phoneNumber']),
-    totalRewards: asT<int?>(jsonRes['totalRewards']),
-    id: asT<int?>(jsonRes['id']),
   );
 
-  String? emailId;
+  int? id;
+  String? phoneNumber;
   String? firstName;
   String? lastName;
+  String? emailId;
+  String? referralCode;
+  int? totalRewards;
   int? milestoneCounter;
   int? milestoneNumber;
-  String? password;
-  String? phoneNumber;
-  int? totalRewards;
-  int? id;
 
   @override
   String toString() {
@@ -45,14 +45,14 @@ class User {
   }
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'emailId': emailId,
+    'id': id,
+    'phoneNumber': phoneNumber,
     'firstName': firstName,
     'lastName': lastName,
-    'id': id,
+    'emailId': emailId,
+    'referralCode': referralCode,
+    'totalRewards': totalRewards,
     'milestoneCounter': milestoneCounter,
     'milestoneNumber': milestoneNumber,
-    'password': password,
-    'phoneNumber': phoneNumber,
-    'totalRewards': totalRewards,
   };
 }

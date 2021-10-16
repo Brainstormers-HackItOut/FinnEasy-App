@@ -4,6 +4,7 @@ import 'dart:developer' as dev;
 import 'dart:math';
 
 // Flutter imports:
+import 'package:file_picker/file_picker.dart';
 import 'package:finneasy/resources/colors.dart';
 import 'package:finneasy/src/models/login/login_form.dart';
 import 'package:finneasy/src/models/login/login_response.dart';
@@ -14,6 +15,7 @@ import 'package:finneasy/src/ui/onboarding/login_screen.dart';
 import 'package:finneasy/src/ui/onboarding/otp_screen.dart';
 import 'package:finneasy/src/ui/onboarding/password_screen.dart';
 import 'package:finneasy/src/ui/onboarding/register_screen.dart';
+import 'package:finneasy/src/ui/rewards/api/reward_api.dart';
 import 'package:finneasy/src/utils/shared_preference_helper.dart';
 import 'package:finneasy/src/widget/flushbar.dart';
 import 'package:finneasy/src/widget/reward_dialog.dart';
@@ -44,6 +46,9 @@ abstract class _LoginStore with Store {
 
   @observable
   int currentTime = 30;
+
+  @observable
+  bool kyc = false;
 
   late Timer _timer;
 
@@ -94,6 +99,35 @@ abstract class _LoginStore with Store {
       // logout(context);
     }
     return _sharedPreferenceHelper.isLoggedIn;
+  }
+  @action
+  uploadAadhar(BuildContext context, TextEditingController aadharController) async {
+    final aadhar = aadharController.text;
+    if (aadhar.isEmpty){
+      showFlushBar(context, "Add aadhar number first");
+    }
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.image
+    );
+    if (result != null) {
+      PlatformFile aadharImage = result.files.single;
+      bool status = false;
+      try {
+        status = await LoginApi.verifyAadhar(aadharImage, aadhar);
+      } catch(e){
+        showFlushBar(context, "Something went wrong. Please try again");
+        return;
+      }
+        if (status){
+          showFlushBar(context, "Aadhar match Successfully",
+              backgroundColor: AppColors.success, icon: Icons.check);
+          kyc = true;
+        } else{
+          showFlushBar(context, "Doesn't match. Please try again");
+        }
+    } else {
+      showFlushBar(context, "Operation Cancelled. Please try again");
+    }
   }
 
   @action
@@ -152,7 +186,7 @@ abstract class _LoginStore with Store {
   }
 
   @action
-  Future<void> register(BuildContext context, String mobile, TextEditingController passwordController,  String username, String email, RoundedLoadingButtonController btnController ) async{
+  Future<void> register(BuildContext context, String mobile, TextEditingController passwordController,  String username, String email, TextEditingController referralController,  RoundedLoadingButtonController btnController ) async{
     final password = passwordController.text;
     if (password.isEmpty){
       btnController.error();
@@ -160,13 +194,24 @@ abstract class _LoginStore with Store {
       btnController.reset();
     }
     else{
-      final registerForm = RegisterForm(
+      RegisterForm registerForm ;
+      if (referralController.text.isNotEmpty) {
+        registerForm = RegisterForm(
+            phoneNumber: mobile,
+            password: password,
+            emailId: email,
+            firstName: username.split(" ")[0],
+            lastName: username.split(" ")[1],
+            referralCode: referralController.text.toString());
+      } else {
+        registerForm = RegisterForm(
           phoneNumber: mobile,
           password: password,
           emailId: email,
           firstName: username.split(" ")[0],
-          lastName: username.split(" ")[1]
-      );
+          lastName: username.split(" ")[1],
+        );
+      }
       final loginForm = LoginForm(
           phoneNumber: mobile,
           password: password,
@@ -188,7 +233,10 @@ abstract class _LoginStore with Store {
       Timer(const Duration(seconds: 2), () async{
           _sharedPreferenceHelper.saveIsLoggedIn(true);
           _sharedPreferenceHelper.saveAuthToken(response.token!);
-            showFlushBar(context, "Login Successfully",
+          if (referralController.text.isNotEmpty) {
+            bool referral = await RewardApi.rewardsReferral(referralController.text);
+          }
+            showFlushBar(context, "Register Successfully",
                 backgroundColor: AppColors.success, icon: Icons.check);
             Navigator.pushAndRemoveUntil(
                 context,

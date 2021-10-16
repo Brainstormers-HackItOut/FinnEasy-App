@@ -11,6 +11,7 @@ class RegisterForm {
     this.phoneNumber,
     this.firstName,
     this.lastName,
+    this.referralCode
   });
 
   factory RegisterForm.fromJson(Map<String, dynamic> jsonRes) => RegisterForm(
@@ -19,6 +20,7 @@ class RegisterForm {
     phoneNumber: asT<String?>(jsonRes['phoneNumber']),
     firstName: asT<String?>(jsonRes['firstName']),
     lastName: asT<String?>(jsonRes['lastName']),
+    referralCode: asT<String?>(jsonRes['referralCode']),
   );
 
   String? password;
@@ -26,6 +28,7 @@ class RegisterForm {
   String? phoneNumber;
   String? firstName;
   String? lastName;
+  String? referralCode;
 
   @override
   String toString() {
@@ -38,5 +41,6 @@ class RegisterForm {
     'phoneNumber': phoneNumber,
     'firstName': firstName,
     'lastName': lastName,
+    'referralCode': referralCode,
   };
 }

@@ -47,23 +47,24 @@ class StockApi {
     return StockTweets();
   }
 
-  static Future<StockTweets> cashFlowAnalysis(List<Map<String, dynamic>> messages) async {
-    var url = "http://20.198.81.29:8000/transaction-info/";
+  static Future<Map<String, dynamic>> cashFlowAnalysis(List<Map<String, dynamic>> messages) async {
+    var url = "http://20.198.81.29:8000/transaction-info";
     dynamic headers = <String, String>{
       "accept": "*/*",
       'Content-Type': "application/json"
     };
-    print(messages);
-    // Response response = await post(
-    //     Uri.parse(url),
-    //     headers: headers,
-    //     body: jsonEncode(messages)
-    // );
-    // if(response.statusCode == 200) {
-    //   dynamic data = jsonDecode(response.body);
-    //   return StockTweets.fromJson(data);
-    // }
-    return StockTweets();
+    log(jsonEncode(messages));
+    Response response = await post(
+        Uri.parse(url),
+        headers: headers,
+        body: jsonEncode(messages)
+    );
+    log(response.body.toString());
+    if(response.statusCode == 200) {
+      dynamic data = jsonDecode(response.body);
+      return Map<String, dynamic>.from(data);
+    }
+    return {};
   }
 
   static Future<Stock> stockPurchase(Stock stock) async {

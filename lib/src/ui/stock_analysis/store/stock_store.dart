@@ -40,7 +40,6 @@ abstract class _StockStore with Store {
   @observable
   double userwealth = 100000;
   @observable
-  @observable
   int number_of_shares = 0;
   @observable
   int totalnumofshare = 0;
@@ -52,6 +51,8 @@ abstract class _StockStore with Store {
   double low = 100;
   @observable
   StockTweets tweets = StockTweets();
+  @observable
+  Map<String, dynamic> cashFlow = {};
 
   late BuildContext context;
 
@@ -77,7 +78,8 @@ abstract class _StockStore with Store {
   Future<void> cashFlowAnalysis(List<Map<String, dynamic>> messages) async {
     isLoading = NetworkState.loading;
     try {
-      tweets = await StockApi.cashFlowAnalysis(messages);
+      cashFlow = await StockApi.cashFlowAnalysis(messages);
+      log(cashFlow.runtimeType.toString());
       isLoading = NetworkState.completed;
     } catch (e, st) {
       isLoading = NetworkState.error;

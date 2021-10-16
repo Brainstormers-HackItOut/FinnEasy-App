@@ -77,10 +77,14 @@ class _HomeCardState extends State<HomeCard>{
             width: screenWidth * 0.05,
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 Icons.monetization_on,
                 color: AppColors.white,
+              ),
+              SizedBox(
+                height: 5,
               ),
               Text(
                 "Avl ${widget.store.user.totalRewards} coins",

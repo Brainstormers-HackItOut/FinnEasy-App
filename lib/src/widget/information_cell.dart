@@ -30,7 +30,6 @@ class InformationCell extends StatelessWidget {
           Divider(color: Theme.of(context).primaryColor, thickness: 1.0),
           Text(
             content.toString(),
-            textAlign: TextAlign.center,
             style: TextStyle(
                 color: Theme.of(context).primaryColor,
                 fontSize: screenWidth * 0.06),

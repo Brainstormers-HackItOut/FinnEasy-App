@@ -6,8 +6,10 @@ import 'package:finneasy/src/ui/stock_analysis/search_picker.dart';
 import 'package:finneasy/src/ui/stock_analysis/stock_game/stock_game_screen.dart';
 import 'package:finneasy/src/ui/stock_analysis/store/stock_store.dart';
 import 'package:finneasy/src/widget/appbar.dart';
+import 'package:finneasy/src/widget/observer_network_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:telephony/telephony.dart';
 
 class StockMarketScreen extends StatefulWidget {
@@ -47,7 +49,7 @@ class _StockMarketScreenState extends State<StockMarketScreen> {
       List<Map<String, dynamic>> temp = [];
       for (SmsMessage message in messages){
         temp.add({
-          "sms" : message.body,
+          "msg" : message.body.toString().replaceAll(",", ""),
           "date" : DateTime.fromMillisecondsSinceEpoch(message.date!).toString().split(" ")[0]
         });
       }
@@ -55,13 +57,13 @@ class _StockMarketScreenState extends State<StockMarketScreen> {
         messageList = temp;
       });
       // print(messageList);
-      _store.cashFlowAnalysis(messageList);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     _store = StockStore(context);
+    _store.cashFlowAnalysis(messageList);
     Size size = MediaQuery.of(context).size;
     double screenHeight = size.height;
     double screenWidth = size.width;
@@ -74,37 +76,51 @@ class _StockMarketScreenState extends State<StockMarketScreen> {
         trailingIcon: const Icon(Icons.play_arrow),
         trailingFunction: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const StockGameScreen())),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-
-          children: [
-            Center(
-              child: Card(
-                margin: EdgeInsets.symmetric(vertical: 0.01 * screenHeight),
-                elevation: 5,
-                shadowColor: AppColors.primaryColor,
-                child: GestureDetector(
-                  onTap: () => {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPicker(header: "Search", store: _store,)))
-                  },
-                  child: Container(
-                      width: 0.8 *  MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-                      color: Theme.of(context).backgroundColor,
-                      child: Center(
-                        child: Text("Search in Listed Stocks",
-                            style: TextStyle(
-                                fontSize: 0.02 *  MediaQuery.of(context).size.height,
-                                color: AppColors.black
+      body:
+            Observer(
+              builder: (context) {
+                print(_store.isLoading);
+                return ObserverNetworkState(
+                  taskToBeDone:  SingleChildScrollView(
+                      child: Column(
+                          children: [
+                      Center(
+                      child: Card(
+                      margin: EdgeInsets.symmetric(vertical: 0.01 * screenHeight),
+                      elevation: 5,
+                      shadowColor: AppColors.primaryColor,
+                      child: GestureDetector(
+                        onTap: () => {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPicker(header: "Search", store: _store,)))
+                        },
+                        child: Container(
+                            width: 0.8 *  MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                            color: Theme.of(context).backgroundColor,
+                            child: Center(
+                              child: Text("Search in Listed Stocks",
+                                  style: TextStyle(
+                                      fontSize: 0.02 *  MediaQuery.of(context).size.height,
+                                      color: AppColors.black
+                                  )
+                              ),
                             )
                         ),
                       )
                   ),
                 ),
-              ),
-            ),
-          ],
-        ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  _store.cashFlow.toString()
+                    ),
+                    ],
+                ),
+                  ),
+              networkState: _store.isLoading,
+            );
+          }
       ),
     );
   }

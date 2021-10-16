@@ -6,7 +6,9 @@ import 'package:finneasy/src/store/login/login_store.dart';
 import 'package:finneasy/src/ui/onboarding/password_screen.dart';
 import 'package:finneasy/src/widget/custom_text_form_field.dart';
 import 'package:finneasy/src/widget/flushbar.dart';
+import 'package:finneasy/src/widget/rounded_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
@@ -29,6 +31,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   FocusNode usernameFocusNode = FocusNode();
   TextEditingController emailController = TextEditingController();
   FocusNode emailFocusNode = FocusNode();
+  TextEditingController aadharController = TextEditingController();
+  FocusNode aadharFocusNode = FocusNode();
 
   // button controllers
   RoundedLoadingButtonController btnController = RoundedLoadingButtonController();
@@ -39,6 +43,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     usernameFocusNode.dispose();
     emailController.dispose();
     emailFocusNode.dispose();
+    aadharController.dispose();
+    aadharFocusNode.dispose();
   }
 
   @override
@@ -131,6 +137,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         hintText: "💻  email",
                                       ),
                                     ),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: screenHeight* 0.045),
+                                      child: CustomTextFormField(
+                                        controller: aadharController,
+                                        focusNode: aadharFocusNode,
+                                        maxLength: 12,
+                                        keyboardType: TextInputType.emailAddress,
+                                        textInputAction: TextInputAction.next,
+                                        validator: (String? value) {
+                                          if (value?.isEmpty ?? true) {
+                                            return 'Please enter valid aadhar number.';
+                                          }
+                                        },
+                                        hintText: "💻  aadhar number",
+                                      ),
+                                    ),
+                                    Observer(
+                                      builder: (context) {
+                                        return Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            RoundedButton(
+                                              width: 200,
+                                              blurRadius: 0,
+                                              borderColor: AppColors.white,
+                                              splashColor: AppColors.white,
+                                              onTap: () {
+                                                _loginStore.uploadAadhar(context, aadharController);
+                                              },
+                                              height: 50,
+                                              borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                              color: _loginStore.kyc ? AppColors.success : AppColors.error,
+                                              child: Text("Upload Aadhar Card Image!",
+                                                  style: TextStyle(color: AppColors.white, fontSize: 15)),
+                                            ),
+                                            Text(
+                                              "KYC", style: TextStyle(color:  _loginStore.kyc ? AppColors.success : AppColors.error, fontSize: 15),
+                                            ),
+                                            Icon(
+                                                _loginStore.kyc ? Icons.check : Icons.close,
+                                              color:  _loginStore.kyc ? AppColors.success : AppColors.error,
+                                            )
+                                          ],
+                                        );
+                                      }
+                                    ),
                                     Center(
                                       child: SizedBox(
                                         width: screenWidth * 0.8,
@@ -141,7 +193,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           successColor: AppColors.success,
                                           borderRadius: screenHeight * 0.15,
                                           child: Text(
-                                              'Login',
+                                              'Proceed',
                                               style: TextStyle(
                                                   letterSpacing: 1,
                                                   color: Theme.of(context).secondaryHeaderColor,
@@ -151,7 +203,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           ),
                                           controller: btnController,
                                           onPressed: () async {
-                                            if (usernameController.text.isEmpty || emailController.text.isEmpty){
+                                            if (usernameController.text.isEmpty || emailController.text.isEmpty || aadharController.text.isEmpty || !_loginStore.kyc){
                                               btnController.error();
                                               showFlushBar(context, "Add credentials");
                                               btnController.reset();

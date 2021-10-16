@@ -8,6 +8,9 @@ import 'package:finneasy/src/ui/home/model/fin_news.dart';
 import 'package:finneasy/src/ui/stock_analysis/model/stock_tweets.dart';
 import 'package:finneasy/src/utils/shared_preference_helper.dart';
 import 'package:http/http.dart';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class LoginApi {
 
@@ -69,5 +72,28 @@ class LoginApi {
       return true;
     }
     return false;
+  }
+
+  static Future<bool> verifyAadhar(PlatformFile aadharImage, String aadhar) async {
+    var request = MultipartRequest('POST', Uri.parse("http://20.198.81.29:8000/aadhar-verification?aadhar_number=$aadhar"));
+    File? compressed = await compressAndGetFile(File(aadharImage.path!), aadharImage.path!.replaceAll(aadharImage.name.split(".")[0], aadharImage.name.split(".")[0]+"-comp"));
+    request.files.add(
+        MultipartFile(
+            'aadhar_card',
+            compressed!.readAsBytes().asStream(),
+            compressed.lengthSync(),
+            filename: aadharImage.name
+        )
+    );
+    var res = await request.send();
+    return res.statusCode == 200;
+  }
+
+  static Future<File?> compressAndGetFile(File file, String targetPath) async {
+    var result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path, targetPath,
+      quality: 50,
+    );
+    return result;
   }
 }

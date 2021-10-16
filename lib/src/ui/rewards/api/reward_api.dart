@@ -22,8 +22,8 @@ class RewardApi {
     };
 
     Response response = await get(
-      Uri.parse(url),
-      headers: headers
+        Uri.parse(url),
+        headers: headers
     );
     List<Reward> temp = [];
     log(response.body.toString());
@@ -35,6 +35,26 @@ class RewardApi {
       return temp;
     }
     return temp;
+  }
+
+  static Future<bool> rewardsReferral(String referralCode) async {
+    SharedPreferenceHelper _sharedPreferenceHelper = SharedPreferenceHelper();
+    String  authToken = await _sharedPreferenceHelper.authToken;
+
+    var url = "http://20.198.81.29:8089/reward/referral/$referralCode";
+    dynamic headers = <String, String>{
+      "accept": "*/*",
+      'Content-Type': "application/json",
+      "Authorization": "Bearer $authToken"
+    };
+
+    Response response = await get(
+        Uri.parse(url),
+        headers: headers
+    );
+    List<Reward> temp = [];
+    log(response.body.toString());
+    return (response.statusCode == 200);
   }
 
 }

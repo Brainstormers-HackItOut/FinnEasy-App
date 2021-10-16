@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: Column(
                   children: <Widget>[
                     SizedBox(
-                      height: screenHeight*0.05,
+                      height: screenHeight*0.15,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

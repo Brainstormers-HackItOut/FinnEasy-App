@@ -144,6 +144,21 @@ mixin _$StockStore on _StockStore, Store {
     });
   }
 
+  final _$cashFlowAtom = Atom(name: '_StockStore.cashFlow');
+
+  @override
+  Map<String, dynamic> get cashFlow {
+    _$cashFlowAtom.reportRead();
+    return super.cashFlow;
+  }
+
+  @override
+  set cashFlow(Map<String, dynamic> value) {
+    _$cashFlowAtom.reportWrite(value, super.cashFlow, () {
+      super.cashFlow = value;
+    });
+  }
+
   final _$stockTweetAnalysisAsyncAction =
       AsyncAction('_StockStore.stockTweetAnalysis');
 
@@ -189,7 +204,8 @@ totalnumofshare: ${totalnumofshare},
 sharesbought: ${sharesbought},
 high: ${high},
 low: ${low},
-tweets: ${tweets}
+tweets: ${tweets},
+cashFlow: ${cashFlow}
     ''';
   }
 }

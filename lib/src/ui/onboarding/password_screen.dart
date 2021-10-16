@@ -32,6 +32,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
   FocusNode passwordFocusNode = FocusNode();
   TextEditingController confirmPasswordController = TextEditingController();
   FocusNode confirmPasswordFocusNode = FocusNode();
+  TextEditingController referralController = TextEditingController();
+  FocusNode referralFocusNode = FocusNode();
 
   // button controllers
   RoundedLoadingButtonController btnController = RoundedLoadingButtonController();
@@ -42,6 +44,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
     passwordFocusNode.dispose();
     confirmPasswordController.dispose();
     confirmPasswordFocusNode.dispose();
+    referralController.dispose();
+    referralFocusNode.dispose();
   }
 
   @override
@@ -120,22 +124,44 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                         hintText: "🔒  password",
                                       ),
                                     ),
-                                    widget.isNewUser ? Padding(
-                                      padding: EdgeInsets.only(top: screenHeight* 0.045),
-                                      child: CustomTextFormField(
-                                        controller: confirmPasswordController,
-                                        focusNode: confirmPasswordFocusNode,
-                                        keyboardType: TextInputType.visiblePassword,
-                                        obscureText: true,
-                                        textInputAction: TextInputAction.next,
-                                        validator: (String? value) {
-                                          if (value?.isEmpty ?? true && value == passwordController.text) {
-                                            return 'Password doesnt match';
-                                          }
-                                        },
-                                        hintText: "🔒  confirm password",
-                                      ),
-                                    ) : const SizedBox.shrink(),
+                                    if (widget.isNewUser) ...{
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: screenHeight * 0.045),
+                                        child: CustomTextFormField(
+                                          controller: confirmPasswordController,
+                                          focusNode: confirmPasswordFocusNode,
+                                          keyboardType: TextInputType
+                                              .visiblePassword,
+                                          obscureText: true,
+                                          textInputAction: TextInputAction.next,
+                                          validator: (String? value) {
+                                            if (value?.isEmpty ?? true &&
+                                                value ==
+                                                    passwordController.text) {
+                                              return 'Password doesnt match';
+                                            }
+                                          },
+                                          hintText: "🔒  confirm password",
+                                        ),
+                                      ), Padding(
+                                        padding: EdgeInsets.only(
+                                            top: screenHeight * 0.045),
+                                        child: CustomTextFormField(
+                                          controller: referralController,
+                                          focusNode: referralFocusNode,
+                                          keyboardType: TextInputType
+                                              .name,
+                                          textInputAction: TextInputAction.next,
+                                          validator: (String? value) {
+                                            if (value?.isEmpty ?? true) {
+                                              return 'Enter valid referral';
+                                            }
+                                          },
+                                          hintText: "🔒  referral code (optional)",
+                                        ),
+                                      )
+                                    },
                                     Center(
                                       child: SizedBox(
                                         width: screenWidth * 0.8,
@@ -163,7 +189,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                             }
                                             else{
                                               if (widget.isNewUser){
-                                                _loginStore.register(context, widget.mobile, passwordController, widget.username, widget.email, btnController);
+                                                _loginStore.register(context, widget.mobile, passwordController, widget.username, widget.email, referralController, btnController);
                                               }
                                               else{
                                                 _loginStore.login(context, widget.mobile, passwordController, btnController);

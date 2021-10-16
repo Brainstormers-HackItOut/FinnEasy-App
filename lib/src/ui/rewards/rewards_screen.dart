@@ -76,56 +76,7 @@ class _RewardsScreenState extends State<RewardsScreen> with TickerProviderStateM
                     SizedBox(
                       height: screenHeight * 0.025,
                     ),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      width: screenWidth * 0.95,
-                      child: TabBar(
-                        controller: _tabController,
-                        indicatorColor: Colors.transparent,
-                        tabs: [
-                          for (int i = 0; i < tabs.length; i++)
-                            Container(
-                              height: screenWidth*0.1,
-                              width: screenWidth*0.45,
-                              child: Center(
-                                child: Text(
-                                  tabs[i].toUpperCase(),
-                                  style: TextStyle(
-                                    fontSize: screenWidth*0.03,
-                                    color: selected[i]
-                                        ? Theme.of(context).focusColor
-                                        : Theme.of(context).secondaryHeaderColor,),
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: !selected[i]
-                                    ? Theme.of(context).focusColor
-                                    : Theme.of(context).secondaryHeaderColor,
-                                borderRadius: BorderRadius.all(Radius.circular(screenWidth*0.3)),
-                                border: Border.all(
-                                    width: 1.5,
-                                    color: !selected[i]
-                                        ? Theme.of(context).focusColor
-                                        : Theme.of(context).primaryColor
-                                ),
-                              ),
-                            )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: screenHeight * 0.015,
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          Milestone(),
-                          RedeemedRewards()
-                        ],
-                      ),
-                    )
+                    Milestone(rewards: _rewardsStore.rewards),
                   ],
                 ),
                 errorOccured: ErrorScreen(

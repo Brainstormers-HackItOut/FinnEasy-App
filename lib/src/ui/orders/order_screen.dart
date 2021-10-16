@@ -29,7 +29,7 @@ class _OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin
   late TabController _tabController;
   late OrderStore _orderStore;
   List<bool> selected = [];
-  List<String> tabs = ["Stock Purchased", "Rewards Redeemed"];
+  List<String> tabs = ["Stock Purchased", "Mutual Funds"];
 
   @override
   void initState() {

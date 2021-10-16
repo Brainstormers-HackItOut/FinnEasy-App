@@ -10,28 +10,34 @@ class User {
     this.emailId,
     this.firstName,
     this.lastName,
+    this.milestoneCounter,
+    this.milestoneNumber,
     this.password,
     this.phoneNumber,
     this.totalRewards,
   });
 
   factory User.fromJson(Map<String, dynamic> jsonRes) => User(
-    id: asT<int?>(jsonRes['id']),
     emailId: asT<String?>(jsonRes['emailId']),
     firstName: asT<String?>(jsonRes['firstName']),
     lastName: asT<String?>(jsonRes['lastName']),
+    milestoneCounter: asT<int?>(jsonRes['milestoneCounter']),
+    milestoneNumber: asT<int?>(jsonRes['milestoneNumber']),
     password: asT<String?>(jsonRes['password']),
     phoneNumber: asT<String?>(jsonRes['phoneNumber']),
     totalRewards: asT<int?>(jsonRes['totalRewards']),
+    id: asT<int?>(jsonRes['id']),
   );
 
-  int? id;
   String? emailId;
   String? firstName;
   String? lastName;
+  int? milestoneCounter;
+  int? milestoneNumber;
   String? password;
   String? phoneNumber;
   int? totalRewards;
+  int? id;
 
   @override
   String toString() {
@@ -41,8 +47,10 @@ class User {
   Map<String, dynamic> toJson() => <String, dynamic>{
     'emailId': emailId,
     'firstName': firstName,
-    'id': id,
     'lastName': lastName,
+    'id': id,
+    'milestoneCounter': milestoneCounter,
+    'milestoneNumber': milestoneNumber,
     'password': password,
     'phoneNumber': phoneNumber,
     'totalRewards': totalRewards,

@@ -64,6 +64,7 @@ abstract class _StockStore with Store {
     isLoading = NetworkState.loading;
     try {
       tweets = await StockApi.stockTweetAnalysis(query);
+      log(tweets.toString());
       isLoading = NetworkState.completed;
     } catch (e, st) {
       isLoading = NetworkState.error;

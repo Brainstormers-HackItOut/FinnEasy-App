@@ -76,18 +76,23 @@ class _HomeCardState extends State<HomeCard>{
           SizedBox(
             width: screenWidth * 0.05,
           ),
-          Text(
-            "${500} coins",
-            style: TextStyle(
+          Column(
+            children: [
+              Icon(
+                Icons.monetization_on,
                 color: AppColors.white,
-                fontSize: 0.04 * screenWidth,
-                fontWeight: FontWeight.w400
-            ),
+              ),
+              Text(
+                "Avl ${widget.store.user.totalRewards} coins",
+                style: TextStyle(
+                    color: AppColors.white,
+                    fontSize: 0.04 * screenWidth,
+                    fontWeight: FontWeight.w400
+                ),
+              ),
+            ],
           ),
-          Icon(
-            Icons.monetization_on,
-            color: AppColors.white,
-          )
+
         ],
       )
     );

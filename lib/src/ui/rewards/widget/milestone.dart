@@ -1,14 +1,16 @@
 // Flutter imports:
 import 'dart:math';
 
+import 'package:finneasy/src/ui/rewards/model/reward.dart';
+import 'package:finneasy/src/widget/cards.dart';
 import 'package:finneasy/src/widget/list_cell.dart';
 import 'package:flutter/material.dart';
 
 
 class Milestone extends StatefulWidget {
-  final dynamic rewards = [];
+  final List<Reward> rewards;
 
-  Milestone({Key? key}) : super(key: key);
+  Milestone({Key? key, required this.rewards}) : super(key: key);
 
  
   @override
@@ -24,26 +26,31 @@ class _MilestoneState extends State<Milestone> {
 
   @override
   Widget build(BuildContext context) {
-    return  SingleChildScrollView(
-        child: Column (
-        children: <Widget>[
-          const SizedBox(
-            height: 15,
-          ),
-          widget.rewards.length! != 0 ? Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: [
-                 for(int i = 0; i < min(widget.rewards.totalResults!, 10); i++)
-                  ListCell(
-                    image_url: widget.rewards.articles![i].urlToImage!,
-                    headline: widget.rewards.articles![i].title!,
-                    news_url: widget.rewards.articles![i].url!,
-                    time: widget.rewards.articles![i].publishedAt!,
-                    news: widget.rewards.articles![i].description!,
-                  )
-                ]
-              )
+    Size size = MediaQuery.of(context).size;
+    double screenHeight = size.height;
+    double screenWidth = size.width;
+    return
+          widget.rewards.isNotEmpty ?
+                  GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: widget.rewards.length,
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.035, vertical: screenHeight * 0.035),
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: screenWidth * 0.42,
+                      mainAxisSpacing: screenHeight * 0.035,
+                      crossAxisSpacing: screenHeight * 0.035,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return Cards(
+                          color: Theme.of(context).cardColor,
+                          text: widget.rewards[index].title.toString(),
+                          coins: widget.rewards[index].coins.toString(),
+                          description: widget.rewards[index].description!,
+                      );
+                    }
+
+
             ) : Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 0.4,
@@ -53,9 +60,7 @@ class _MilestoneState extends State<Milestone> {
                 fit: BoxFit.cover,
                 alignment: Alignment.topCenter),
           ),
-          child: null)
-        ],
-          ),
+          child: null
       );
   }
 }

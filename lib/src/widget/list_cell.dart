@@ -11,16 +11,16 @@ class ListCell extends StatelessWidget {
   final String headline;
   final String news;
   final String time;
-  final String image_url;
-  final String news_url;
+  final String? image_url;
+  final String? news_url;
 
   const ListCell({
     Key? key,
     required this.headline,
     required this.news,
     required this.time,
-    required this.image_url,
-    required this.news_url}) : super(key: key);
+    this.image_url = "",
+    this.news_url = ""}) : super(key: key);
 
 
   @override
@@ -55,16 +55,16 @@ class ListCell extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Expanded(
+                image_url != null ? Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10, bottom: 5, right: 5),
                     child: Image(
-                      image: NetworkImage(image_url),
+                      image: NetworkImage(image_url!),
                       width: 50,
                       height: 100
                     )
                   ),
-                ),
+                ) : SizedBox.shrink(),
                 Expanded(
                   child: Padding(
                       padding: const EdgeInsets.only(left: 10, top: 10),
@@ -94,14 +94,14 @@ class ListCell extends StatelessWidget {
               ],
             ),
           ),
-          Positioned(
+          news_url!= null ? Positioned(
             right: 10.0,
             top: 10,
             child: Align(
               alignment: Alignment.topRight,
               child: RoundedButton(
                 onTap: () {
-                  launchURL(context, news_url);
+                  launchURL(context, news_url!);
                 },
                 width: screenWidth * 0.3,
                 height: screenWidth * 0.06,
@@ -119,7 +119,7 @@ class ListCell extends StatelessWidget {
                 ),
               ),
             ),
-          ),
+          ) : SizedBox.shrink(),
         ]
     );
   }

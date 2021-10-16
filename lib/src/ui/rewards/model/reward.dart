@@ -4,32 +4,29 @@ import 'package:finneasy/src/models/model_utilities.dart';
 
 class Reward {
   Reward({
-    this.companyCode,
-    this.companyName,
+    this.coins,
+    this.description,
     this.id,
-    this.quantity,
-    this.stockPrice,
-    this.type,
-    this.userId,
+    this.imageUrl,
+    this.milestoneNumber,
+    this.title,
   });
 
   factory Reward.fromJson(Map<String, dynamic> jsonRes) => Reward(
-    companyCode: asT<String?>(jsonRes['companyCode']),
-    companyName: asT<String?>(jsonRes['companyName']),
+    coins: asT<int?>(jsonRes['coins']),
+    description: asT<String?>(jsonRes['description']),
     id: asT<int?>(jsonRes['id']),
-    quantity: asT<int?>(jsonRes['quantity']),
-    stockPrice: asT<String?>(jsonRes['stockPrice']),
-    type: asT<String?>(jsonRes['type']),
-    userId: asT<int?>(jsonRes['userId']),
+    imageUrl: asT<String?>(jsonRes['image_url']),
+    milestoneNumber: asT<int?>(jsonRes['milestoneNumber']),
+    title: asT<String?>(jsonRes['title']),
   );
 
-  String? companyCode;
-  String? companyName;
+  int? coins;
+  String? description;
   int? id;
-  int? quantity;
-  String? stockPrice;
-  String? type;
-  int? userId;
+  String? imageUrl;
+  int? milestoneNumber;
+  String? title;
 
   @override
   String toString() {
@@ -37,12 +34,11 @@ class Reward {
   }
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'companyCode': companyCode,
-    'companyName': companyName,
+    'coins': coins,
+    'description': description,
     'id': id,
-    'quantity': quantity,
-    'stockPrice': stockPrice,
-    'type': type,
-    'userId': userId,
+    'image_url': imageUrl,
+    'milestoneNumber': milestoneNumber,
+    'title': title,
   };
 }

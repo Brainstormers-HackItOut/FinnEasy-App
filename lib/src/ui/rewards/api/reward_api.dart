@@ -14,7 +14,7 @@ class RewardApi {
     SharedPreferenceHelper _sharedPreferenceHelper = SharedPreferenceHelper();
     String  authToken = await _sharedPreferenceHelper.authToken;
 
-    var url = "http://20.198.81.29:8089/rewards/all";
+    var url = "http://20.198.81.29:8089/reward/all";
     dynamic headers = <String, String>{
       "accept": "*/*",
       'Content-Type': "application/json",

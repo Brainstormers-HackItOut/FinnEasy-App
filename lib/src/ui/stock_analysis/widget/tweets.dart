@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'dart:math';
+
 import 'package:finneasy/resources/colors.dart';
 import 'package:finneasy/src/ui/stock_analysis/model/stock_tweets.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +21,9 @@ class Tweets extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          for (int i =0; i < tweets.twList!.length ; i++)
+          for (int i =0; i < min(tweets.twList!.length, 8); i++)
               Container(
                 width: screenWidth * 0.9,
-                margin: EdgeInsets.only(top: screenHeight * 0.01, bottom: screenHeight * 0.02),
                 decoration: BoxDecoration(
                   color: Theme.of(context).selectedRowColor,
                   shape: BoxShape.rectangle,
@@ -40,10 +41,10 @@ class Tweets extends StatelessWidget {
               ),
               child: ListTile(
                 title: Text(
-                  tweets.twList![i],
+                  tweets.twList![i].substring(0, min(tweets.twList![i].length, 100)) + '...',
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
-                    fontSize: screenWidth * 0.05,
+                    fontSize: screenWidth * 0.035,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

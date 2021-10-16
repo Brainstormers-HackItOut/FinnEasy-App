@@ -165,15 +165,17 @@ mixin _$StockStore on _StockStore, Store {
   final _$buyAsyncAction = AsyncAction('_StockStore.buy');
 
   @override
-  Future<void> buy() {
-    return _$buyAsyncAction.run(() => super.buy());
+  Future<void> buy(String companyCode, String companyName, double stockPrice) {
+    return _$buyAsyncAction
+        .run(() => super.buy(companyCode, companyName, stockPrice));
   }
 
   final _$sellAsyncAction = AsyncAction('_StockStore.sell');
 
   @override
-  Future<void> sell() {
-    return _$sellAsyncAction.run(() => super.sell());
+  Future<void> sell(String companyCode, String companyName, double stockPrice) {
+    return _$sellAsyncAction
+        .run(() => super.sell(companyCode, companyName, stockPrice));
   }
 
   @override

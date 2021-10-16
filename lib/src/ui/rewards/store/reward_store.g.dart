@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'order_store.dart';
+part of 'reward_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,8 +8,8 @@ part of 'order_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$OrderStore on _OrderStore, Store {
-  final _$dataAtom = Atom(name: '_OrderStore.data');
+mixin _$RewardsStore on _RewardsStore, Store {
+  final _$dataAtom = Atom(name: '_RewardsStore.data');
 
   @override
   Map<String, dynamic> get data {
@@ -24,7 +24,7 @@ mixin _$OrderStore on _OrderStore, Store {
     });
   }
 
-  final _$shouldShowAtom = Atom(name: '_OrderStore.shouldShow');
+  final _$shouldShowAtom = Atom(name: '_RewardsStore.shouldShow');
 
   @override
   bool get shouldShow {
@@ -39,7 +39,7 @@ mixin _$OrderStore on _OrderStore, Store {
     });
   }
 
-  final _$greetingMessageAtom = Atom(name: '_OrderStore.greetingMessage');
+  final _$greetingMessageAtom = Atom(name: '_RewardsStore.greetingMessage');
 
   @override
   String get greetingMessage {
@@ -54,7 +54,7 @@ mixin _$OrderStore on _OrderStore, Store {
     });
   }
 
-  final _$isLoadingAtom = Atom(name: '_OrderStore.isLoading');
+  final _$isLoadingAtom = Atom(name: '_RewardsStore.isLoading');
 
   @override
   NetworkState get isLoading {
@@ -69,26 +69,12 @@ mixin _$OrderStore on _OrderStore, Store {
     });
   }
 
-  final _$ordersAtom = Atom(name: '_OrderStore.orders');
+  final _$refreshRewardsAsyncAction =
+      AsyncAction('_RewardsStore.refreshRewards');
 
   @override
-  List<Order> get orders {
-    _$ordersAtom.reportRead();
-    return super.orders;
-  }
-
-  @override
-  set orders(List<Order> value) {
-    _$ordersAtom.reportWrite(value, super.orders, () {
-      super.orders = value;
-    });
-  }
-
-  final _$refreshOrderAsyncAction = AsyncAction('_OrderStore.refreshOrder');
-
-  @override
-  Future<void> refreshOrder() {
-    return _$refreshOrderAsyncAction.run(() => super.refreshOrder());
+  Future<void> refreshRewards() {
+    return _$refreshRewardsAsyncAction.run(() => super.refreshRewards());
   }
 
   @override
@@ -97,8 +83,7 @@ mixin _$OrderStore on _OrderStore, Store {
 data: ${data},
 shouldShow: ${shouldShow},
 greetingMessage: ${greetingMessage},
-isLoading: ${isLoading},
-orders: ${orders}
+isLoading: ${isLoading}
     ''';
   }
 }

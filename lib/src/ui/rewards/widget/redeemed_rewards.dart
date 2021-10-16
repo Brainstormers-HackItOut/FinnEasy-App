@@ -1,13 +1,10 @@
 // Flutter imports:
 import 'package:finneasy/resources/colors.dart';
-import 'package:finneasy/src/ui/orders/model/order.dart';
-import 'package:finneasy/src/utils/url_launcher.dart';
 import 'package:flutter/material.dart';
 
 
-class Orders extends StatelessWidget {
-  final List<Order> orders;
-  const Orders({Key? key, required this.orders}) : super(key: key);
+class RedeemedRewards extends StatelessWidget {
+  const RedeemedRewards({Key? key}) : super(key: key);
 
 
   @override
@@ -16,11 +13,11 @@ class Orders extends StatelessWidget {
     double screenHeight = size.height;
     double screenWidth = size.width;
     return SingleChildScrollView(
-      child: orders.isNotEmpty ? Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
 
-          for (int i = 0; i < orders.length; i++)
+          for (int i =0; i< 10; i++)
               Container(
                 width: screenWidth * 0.9,
                 margin: EdgeInsets.only(top: screenHeight * 0.01, bottom: screenHeight * 0.02),
@@ -42,20 +39,16 @@ class Orders extends StatelessWidget {
               child: ListTile(
                 leading: CircleAvatar(
                   child: Text(
-                    orders[i].companyCode!
+                    "AT"
                   )
                 ),
-                trailing: IconButton(
-                  icon: Icon(
-                    Icons.thumb_up_sharp,
-                    color: Theme.of(context).primaryColor,
-                    size: screenWidth * 0.05,
-                  ), onPressed: () {
-                    launchURL(context, "https://in.tradingview.com/chart/?symbol=NSE%3A${orders[i].companyCode!}");
-                },
+                trailing: Icon(
+                  Icons.thumb_up_sharp,
+                  color: Theme.of(context).primaryColor,
+                  size: screenWidth * 0.05,
                 ),
                 title: Text(
-                  orders[i].companyName!,
+                  "Ajinkya Taranekar",
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontSize: screenWidth * 0.05,
@@ -63,7 +56,7 @@ class Orders extends StatelessWidget {
                   ),
                 ),
                 subtitle:Text(
-                  "${orders[i].quantity!} @ Rs. ${orders[i].stockPrice!}",
+                  "Today will be a good deal with Tata, buy maximum stocks.",
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontSize: screenWidth * 0.04,
@@ -73,16 +66,7 @@ class Orders extends StatelessWidget {
               ),
           ),
         ]
-      ) : Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.4,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/notification.png"),
-                fit: BoxFit.cover,
-                alignment: Alignment.topCenter),
-          ),
-          child: null)
+      ),
     );
   }
 }

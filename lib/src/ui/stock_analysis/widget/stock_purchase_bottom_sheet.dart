@@ -11,48 +11,46 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 class ShoppingBottomSheet extends StatelessWidget {
   final StockStore store;
-  final String stockname;
+  final String symbol;
+  final String stockName;
+  final double stockPrice;
 
   late double screenHeight, screenWidth;
 
-  ShoppingBottomSheet({Key? key, required this.store, required this.stockname}) : super(key: key);
+  ShoppingBottomSheet({
+    Key? key,
+    required this.store,
+    required this.stockName,
+    required this.symbol,
+    required this.stockPrice}) : super(key: key);
 
 
   @override
   Widget build(BuildContext context) {
+    store.stockTweetAnalysis(stockName);
+
     Size size = MediaQuery.of(context).size;
     screenHeight = size.height;
     screenWidth = size.width;
 
-    return BottomSheet(
-      onClosing: () {  },
-      builder: (BuildContext context) {
-        return Container(
-            decoration: BoxDecoration(
-                color: AppColors.primaryColor.withOpacity(0.9),
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(50.0),
-                    topRight: Radius.circular(50.0)
-                )
-            ),
-            child: Observer(
-                builder: (_) {
-                  return ObserverNetworkState(
-                    taskToBeDone: sheet(),
-                    networkState: store.isLoading,
-                  );
-                }
-            )
-        );
-      },
+
+    return SizedBox(
+      height: 200,
+      child: Observer(
+              builder: (_) {
+                return ObserverNetworkState(
+                  taskToBeDone: sheet(),
+                  networkState: store.isLoading,
+                );
+              }
+
+      ),
     );
   }
 
 
   Widget sheet(){
-
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +131,11 @@ class ShoppingBottomSheet extends StatelessWidget {
               children: <Widget>[
                 RoundedButton(
                   onTap: () {
-                    store.buy();
+                    store.buy(
+                      symbol,
+                      stockName,
+                      stockPrice
+                    );
                   },
                   child: Text(
                     '  BUY  ',
@@ -155,7 +157,11 @@ class ShoppingBottomSheet extends StatelessWidget {
                 ),
                 RoundedButton(
                   onTap: () {
-                    store.sell();
+                    store.sell(
+                        symbol,
+                        stockName,
+                        stockPrice
+                    );
                   },
                   child: Text(
                     '  SELL  ',
@@ -170,12 +176,12 @@ class ShoppingBottomSheet extends StatelessWidget {
                   height: 40,
                   width: 100,
                   blurRadius: 0,
-                  borderColor: AppColors.primaryColor,
+                  borderColor: AppColors.white,
                 ),
               ]),
 
         ]
-      )
+      ),
     );
   }
 

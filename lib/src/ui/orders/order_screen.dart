@@ -123,7 +123,7 @@ class _OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin
                       child: TabBarView(
                         controller: _tabController,
                         children: [
-                          Orders(),
+                          Orders(orders: _orderStore.orders),
                           Rewards()
                         ],
                       ),

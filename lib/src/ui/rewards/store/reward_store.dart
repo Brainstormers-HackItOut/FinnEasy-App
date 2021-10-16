@@ -6,8 +6,6 @@ import 'dart:developer';
 
 // Package imports:
 import 'package:finneasy/src/core/network_state/network_state.dart';
-import 'package:finneasy/src/ui/orders/api/order_api.dart';
-import 'package:finneasy/src/ui/orders/model/order.dart';
 import 'package:finneasy/src/utils/greeting.dart';
 import 'package:finneasy/src/widget/flushbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,13 +15,13 @@ import 'package:mobx/mobx.dart';
 
 // Project imports:
 
-part 'order_store.g.dart';
+part 'reward_store.g.dart';
 
-class OrderStore = _OrderStore with _$OrderStore;
+class RewardsStore = _RewardsStore with _$RewardsStore;
 
 
-abstract class _OrderStore with Store {
-  final String TAG = "_OrderStore";
+abstract class _RewardsStore with Store {
+  final String TAG = "_RewardsStore";
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -39,18 +37,14 @@ abstract class _OrderStore with Store {
   @observable
   NetworkState isLoading = NetworkState.initial;
 
-  @observable
-  List<Order> orders = [];
-
-  _OrderStore() {
-    refreshOrder();
+  _RewardsStore() {
+    refreshRewards();
   }
 
   @action
-  Future<void> refreshOrder() async {
+  Future<void> refreshRewards() async {
     isLoading = NetworkState.loading;
     try {
-      orders = await OrderApi.fetchAllOrder();
       isLoading = NetworkState.completed;
     } catch (e, st) {
       isLoading = NetworkState.error;

@@ -84,6 +84,51 @@ mixin _$HomeStore on _HomeStore, Store {
     });
   }
 
+  final _$userAtom = Atom(name: '_HomeStore.user');
+
+  @override
+  User get user {
+    _$userAtom.reportRead();
+    return super.user;
+  }
+
+  @override
+  set user(User value) {
+    _$userAtom.reportWrite(value, super.user, () {
+      super.user = value;
+    });
+  }
+
+  final _$blogAtom = Atom(name: '_HomeStore.blog');
+
+  @override
+  List<BlogResponse> get blog {
+    _$blogAtom.reportRead();
+    return super.blog;
+  }
+
+  @override
+  set blog(List<BlogResponse> value) {
+    _$blogAtom.reportWrite(value, super.blog, () {
+      super.blog = value;
+    });
+  }
+
+  final _$blogLikeDislikeAtom = Atom(name: '_HomeStore.blogLikeDislike');
+
+  @override
+  List<bool> get blogLikeDislike {
+    _$blogLikeDislikeAtom.reportRead();
+    return super.blogLikeDislike;
+  }
+
+  @override
+  set blogLikeDislike(List<bool> value) {
+    _$blogLikeDislikeAtom.reportWrite(value, super.blogLikeDislike, () {
+      super.blogLikeDislike = value;
+    });
+  }
+
   final _$refreshHomeAsyncAction = AsyncAction('_HomeStore.refreshHome');
 
   @override
@@ -100,6 +145,25 @@ mixin _$HomeStore on _HomeStore, Store {
         .run(() => super.shouldShowGreeting());
   }
 
+  final _$blogCreateAsyncAction = AsyncAction('_HomeStore.blogCreate');
+
+  @override
+  Future<void> blogCreate(
+      BuildContext context,
+      TextEditingController titleController,
+      TextEditingController bodyController) {
+    return _$blogCreateAsyncAction
+        .run(() => super.blogCreate(context, titleController, bodyController));
+  }
+
+  final _$likeDislikeAsyncAction = AsyncAction('_HomeStore.likeDislike');
+
+  @override
+  Future<void> likeDislike(BuildContext context, int index, int blog_id) {
+    return _$likeDislikeAsyncAction
+        .run(() => super.likeDislike(context, index, blog_id));
+  }
+
   @override
   String toString() {
     return '''
@@ -107,7 +171,10 @@ data: ${data},
 shouldShow: ${shouldShow},
 greetingMessage: ${greetingMessage},
 isLoading: ${isLoading},
-news: ${news}
+news: ${news},
+user: ${user},
+blog: ${blog},
+blogLikeDislike: ${blogLikeDislike}
     ''';
   }
 }

@@ -109,6 +109,7 @@ class _SearchPickerState extends State<SearchPicker> {
                         GestureDetector(
                           onTap: () {
                             log(currentSearch[index].toString());
+
                             Navigator.push(context, MaterialPageRoute(
                                 builder: (context) =>
                                     WebPageView(
@@ -117,20 +118,15 @@ class _SearchPickerState extends State<SearchPicker> {
                                           currentSearch[index].symbol!,
                                       icon: const Icon(
                                           Icons.shopping_bag_outlined),
-                                      function: () {
-                                        showModalBottomSheet<dynamic>(
-                                          isScrollControlled: true,
-                                          context: context,
-                                          elevation: 1.0,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (buildContext) {
-                                            return ShoppingBottomSheet(
-                                              store: widget.store,
-                                              stockname: currentSearch[index]
-                                                  .nameOfCompany!,);
-                                          },
-                                        );
-                                      },
+                                      widget: ShoppingBottomSheet(
+                                        store: widget.store,
+                                        stockName: currentSearch[index]
+                                            .nameOfCompany!,
+                                        symbol: currentSearch[index]
+                                            .symbol!,
+                                        stockPrice: currentSearch[index]
+                                            .paidUpValue! + 0.0,
+                                      )
                                     )));
                           },
                           child: Container(

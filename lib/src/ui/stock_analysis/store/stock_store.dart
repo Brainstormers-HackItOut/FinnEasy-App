@@ -10,9 +10,12 @@ import 'package:finneasy/src/core/network_state/network_state.dart';
 import 'package:finneasy/src/ui/home/api/fin_news_api.dart';
 import 'package:finneasy/src/ui/home/model/fin_news.dart';
 import 'package:finneasy/src/ui/stock_analysis/api/stock_api.dart';
+import 'package:finneasy/src/ui/stock_analysis/model/stock.dart';
 import 'package:finneasy/src/ui/stock_analysis/model/stock_tweets.dart';
 import 'package:finneasy/src/utils/greeting.dart';
+import 'package:finneasy/src/utils/shared_preference_helper.dart';
 import 'package:finneasy/src/widget/flushbar.dart';
+import 'package:finneasy/src/widget/reward_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -106,14 +109,35 @@ abstract class _StockStore with Store {
 
 
   @action
-  Future<void> buy() async {
-      if (price * totalnumofshare <= userwealth) {
+  Future<void> buy(String companyCode, String companyName, double stockPrice,) async {
+      if (stockPrice * totalnumofshare <= userwealth) {
         if (totalnumofshare > 0) {
+          SharedPreferenceHelper _sharedPreferenceHelper = SharedPreferenceHelper();
+          int user_id = await _sharedPreferenceHelper.userId;
+
+          Stock stockForm = Stock (
+            companyCode: companyCode,
+            companyName: companyName,
+            stockPrice: stockPrice.toString(),
+            userId: user_id,
+            type: "BUY",
+            quantity: totalnumofshare
+          );
+          Stock stock = Stock();
+          try {
+            stock = await StockApi.stockPurchase(stockForm);
+          } catch (e, st) {
+            showFlushBar(scaffoldKey.currentContext!, e.toString());
+            log(e.toString(), stackTrace: st);
+          }
 
           userwealth =
-              userwealth - (price * totalnumofshare);
+              userwealth - (stockPrice * totalnumofshare);
           sharesbought = sharesbought + totalnumofshare;
           number_of_shares = userwealth ~/ price;
+          if (stock.reward != null){
+            showRewardDialog(context, stock.reward!);
+          }
           _showFlushbar();
         } else {
           showFlushBar(
@@ -131,13 +155,37 @@ abstract class _StockStore with Store {
   }
 
   @action
-  Future<void> sell() async {
-      if (totalnumofshare <= sharesbought) {
-        if (totalnumofshare > 0) {
-          userwealth =
+  Future<void> sell(String companyCode, String companyName, double stockPrice,) async {
+    if (totalnumofshare <= sharesbought) {
+      if (totalnumofshare > 0) {
+        SharedPreferenceHelper _sharedPreferenceHelper = SharedPreferenceHelper();
+        int user_id = await _sharedPreferenceHelper.userId;
+
+        Stock stockForm = Stock (
+            companyCode: companyCode,
+            companyName: companyName,
+            stockPrice: stockPrice.toString(),
+            userId: user_id,
+            type: "BUY",
+            quantity: totalnumofshare
+        );
+        Stock stock= Stock();
+        try {
+          stock = await StockApi.stockPurchase(stockForm);
+        } catch (e, st) {
+          showFlushBar(scaffoldKey.currentContext!, e.toString());
+          log(e.toString(), stackTrace: st);
+        }
+
+        if (stock.reward != null){
+          showRewardDialog(context, stock.reward!);
+        }
+
+        userwealth =
               userwealth + (totalnumofshare * price);
           sharesbought = sharesbought - totalnumofshare;
           number_of_shares = userwealth ~/ price;
+
           _showFlushbarsell();
         } else {
           showFlushBar(

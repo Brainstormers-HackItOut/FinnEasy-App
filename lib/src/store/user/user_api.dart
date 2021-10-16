@@ -28,7 +28,7 @@ class UserApi {
         Uri.parse(url),
         headers: headers
     );
-    log(response.statusCode.toString());
+    log(response.body.toString());
     if(response.statusCode == 200) {
       dynamic data = jsonDecode(response.body);
       return User.fromJson(data);

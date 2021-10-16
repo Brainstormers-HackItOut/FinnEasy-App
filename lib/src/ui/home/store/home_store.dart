@@ -60,21 +60,29 @@ abstract class _HomeStore with Store {
   @observable
   List<bool> blogLikeDislike = [];
 
-  _HomeStore() {
-    refreshHome();
-    shouldShowGreeting();
+  _HomeStore({bool notHome = false}) {
+    if (notHome) {
+      refreshHome(notHome);
+    }else{
+      refreshHome(notHome);
+      shouldShowGreeting();
+    }
   }
 
   @action
-  Future<void> refreshHome() async {
+  Future<void> refreshHome(bool notHome) async {
     isLoading = NetworkState.loading;
     try {
-      news = await FinNewsApi.fetchNews();
-      user = await UserApi.fetchUser();
-      blog = await BlogApi.fetchBlogs();
-      blogLikeDislike = List.filled(blog.length, false);
-      _sharedPreferenceHelper.saveUserId(user.id!);
-      greetingMessage = greeting();
+      if (notHome) {
+        user = await UserApi.fetchUser();
+      } else{
+        user = await UserApi.fetchUser();
+        blog = await BlogApi.fetchBlogs();
+        news = await FinNewsApi.fetchNews();
+        blogLikeDislike = List.filled(blog.length, false);
+        _sharedPreferenceHelper.saveUserId(user.id!);
+        greetingMessage = greeting();
+      }
       isLoading = NetworkState.completed;
     } catch (e, st) {
       isLoading = NetworkState.error;

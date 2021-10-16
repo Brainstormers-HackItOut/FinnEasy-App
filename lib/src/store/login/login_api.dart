@@ -17,11 +17,13 @@ class LoginApi {
       "accept": "*/*",
       'Content-Type': "application/json"
     };
+    log(loginForm.toString());
     Response response = await post(
         Uri.parse(url),
         headers: headers,
         body: jsonEncode(loginForm)
     );
+    log(response.body.toString());
     if(response.statusCode == 200) {
       dynamic data = jsonDecode(response.body);
       return LoginResponse.fromJson(data);

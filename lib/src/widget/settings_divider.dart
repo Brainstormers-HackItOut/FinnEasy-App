@@ -12,7 +12,7 @@ class SettingsDivider extends StatelessWidget {
       Expanded(
         child: Container(
           alignment: Alignment.topLeft,
-          child: Text(dividerTitle, style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold)),
+          child: Text(dividerTitle, style: TextStyle(fontSize: 20, color: Theme.of(context).focusColor, fontWeight: FontWeight.bold)),
           padding: EdgeInsets.all(10),
         ),
       )

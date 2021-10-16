@@ -69,6 +69,21 @@ mixin _$RewardsStore on _RewardsStore, Store {
     });
   }
 
+  final _$rewardsAtom = Atom(name: '_RewardsStore.rewards');
+
+  @override
+  List<Reward> get rewards {
+    _$rewardsAtom.reportRead();
+    return super.rewards;
+  }
+
+  @override
+  set rewards(List<Reward> value) {
+    _$rewardsAtom.reportWrite(value, super.rewards, () {
+      super.rewards = value;
+    });
+  }
+
   final _$refreshRewardsAsyncAction =
       AsyncAction('_RewardsStore.refreshRewards');
 
@@ -83,7 +98,8 @@ mixin _$RewardsStore on _RewardsStore, Store {
 data: ${data},
 shouldShow: ${shouldShow},
 greetingMessage: ${greetingMessage},
-isLoading: ${isLoading}
+isLoading: ${isLoading},
+rewards: ${rewards}
     ''';
   }
 }

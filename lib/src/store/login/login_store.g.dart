@@ -9,6 +9,21 @@ part of 'login_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$LoginStore on _LoginStore, Store {
+  final _$currentTimeAtom = Atom(name: '_LoginStore.currentTime');
+
+  @override
+  int get currentTime {
+    _$currentTimeAtom.reportRead();
+    return super.currentTime;
+  }
+
+  @override
+  set currentTime(int value) {
+    _$currentTimeAtom.reportWrite(value, super.currentTime, () {
+      super.currentTime = value;
+    });
+  }
+
   final _$getHomeScreenAsyncAction = AsyncAction('_LoginStore.getHomeScreen');
 
   @override
@@ -56,10 +71,30 @@ mixin _$LoginStore on _LoginStore, Store {
     return _$logoutAsyncAction.run(() => super.logout(context));
   }
 
+  final _$retryAsyncAction = AsyncAction('_LoginStore.retry');
+
+  @override
+  Future retry(BuildContext context, String mobile) {
+    return _$retryAsyncAction.run(() => super.retry(context, mobile));
+  }
+
+  final _$_LoginStoreActionController = ActionController(name: '_LoginStore');
+
+  @override
+  void startTimer() {
+    final _$actionInfo = _$_LoginStoreActionController.startAction(
+        name: '_LoginStore.startTimer');
+    try {
+      return super.startTimer();
+    } finally {
+      _$_LoginStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
-
+currentTime: ${currentTime}
     ''';
   }
 }

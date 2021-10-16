@@ -42,6 +42,11 @@ abstract class _LoginStore with Store {
   String? verificationId;
   FirebaseAuth auth = FirebaseAuth.instance;
 
+  @observable
+  int currentTime = 30;
+
+  late Timer _timer;
+
   _LoginStore(){
     init();
   }
@@ -57,6 +62,22 @@ abstract class _LoginStore with Store {
       return const DashBoardScreen(index: 0,);
     }
     return const LoginScreen();
+  }
+
+  @action
+  void startTimer() {
+    currentTime = 30;
+    const oneSec = const Duration(seconds: 1);
+    _timer = Timer.periodic(
+      oneSec,
+          (Timer timer) {
+        if (currentTime == 0) {
+          timer.cancel();
+        } else {
+          currentTime--;
+        }
+      },
+    );
   }
 
   @action
@@ -88,7 +109,7 @@ abstract class _LoginStore with Store {
       LoginResponse response;
       try{
         response = await LoginApi.login(form);
-       }
+      }
       catch(e){
         btnController.error();
         showFlushBar(context, "Something went wrong. Please try again");
@@ -189,6 +210,26 @@ abstract class _LoginStore with Store {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
+  @action
+  Future<void> retry(BuildContext context, String mobile) async{
+    startTimer();
+    await auth.verifyPhoneNumber(
+        phoneNumber: "+91" + mobile,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          onVerificationComplete(credential, context);
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          showFlushBar(context, e.toString());
+        },
+        timeout: const Duration(seconds: 120),
+        codeAutoRetrievalTimeout: (String verificationId) {
+          showFlushBar(context, "OTP Expired");
+        },
+        codeSent: (String verificationId, int? resendToken) async {
+          this.verificationId = verificationId;
+        }
+    );
+  }
 
   Future<void> verifyPhone(BuildContext context, TextEditingController mobileController, RoundedLoadingButtonController btnController) async {
     final mobile = mobileController.text;
@@ -206,7 +247,7 @@ abstract class _LoginStore with Store {
           verificationFailed: (FirebaseAuthException e) {
             showFlushBar(context, e.toString());
           },
-          timeout: const Duration(seconds: 60),
+          timeout: const Duration(seconds: 120),
           codeAutoRetrievalTimeout: (String verificationId) {
             showFlushBar(context, "OTP Expired");
           },
@@ -214,7 +255,7 @@ abstract class _LoginStore with Store {
             this.verificationId = verificationId;
           }
       );
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OTPScreen(mobile: mobile)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => OTPScreen(mobile: mobile)));
       btnController.success();
     }
   }
@@ -243,9 +284,9 @@ abstract class _LoginStore with Store {
       _sharedPreferenceHelper.saveUid(firebaseUser!.uid);
       bool isNewUser = userCredential.additionalUserInfo!.isNewUser;
       if(isNewUser) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterScreen(mobile: firebaseUser.phoneNumber!)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen(mobile: firebaseUser.phoneNumber!)));
       } else {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PasswordScreen(mobile: firebaseUser.phoneNumber!, isNewUser: isNewUser)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => PasswordScreen(mobile: firebaseUser.phoneNumber!, isNewUser: isNewUser)));
       }
     } catch (e) {
       showFlushBar(context, e.toString());

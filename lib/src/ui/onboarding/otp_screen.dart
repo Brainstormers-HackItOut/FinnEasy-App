@@ -5,6 +5,7 @@ import 'package:finneasy/resources/colors.dart';
 import 'package:finneasy/src/store/login/login_store.dart';
 import 'package:finneasy/src/widget/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
@@ -44,6 +45,7 @@ class _OTPScreenState extends State<OTPScreen> {
   @override
   Widget build(BuildContext context) {
     _loginStore = Provider.of<LoginStore>(context);
+    _loginStore.startTimer();
     Size size = MediaQuery.of(context).size;
     double screenHeight = size.height;
     double screenWidth = size.width;
@@ -147,20 +149,35 @@ class _OTPScreenState extends State<OTPScreen> {
                                         ),
                                       ),
                                     ),
-                                    Center(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                        },
-                                        child: Text(
-                                            'Resend OTP!',
-                                            style: TextStyle(
-                                                letterSpacing: 1,
-                                                color: Theme.of(context).primaryColor,
-                                                fontSize: screenWidth * 0.04,
-                                                fontWeight: FontWeight.w400
-                                            )
-                                        ),
-                                      ),
+                                    Observer(
+                                        builder: (BuildContext context) {
+                                          return Container(
+                                              padding: EdgeInsets.symmetric(vertical: 10),
+                                              child: _loginStore.currentTime != 0 ? Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                      "You will recieve OTP in ",
+                                                      style: Theme.of(context).textTheme.subtitle1
+                                                  ),
+                                                  Text(
+                                                      _loginStore.currentTime.toString(),
+                                                      style: Theme.of(context).textTheme.subtitle2
+                                                  ),
+                                                ],
+                                              ) : Center(
+                                                child: TextButton(
+                                                  onPressed: () {
+                                                    _loginStore.retry(context, widget.mobile);
+                                                  },
+                                                  child: Text(
+                                                    'Resend OTP!',
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              )
+                                          );
+                                        }
                                     )
                                   ],
                                 ),

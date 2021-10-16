@@ -132,8 +132,8 @@ mixin _$HomeStore on _HomeStore, Store {
   final _$refreshHomeAsyncAction = AsyncAction('_HomeStore.refreshHome');
 
   @override
-  Future<void> refreshHome() {
-    return _$refreshHomeAsyncAction.run(() => super.refreshHome());
+  Future<void> refreshHome(bool notHome) {
+    return _$refreshHomeAsyncAction.run(() => super.refreshHome(notHome));
   }
 
   final _$shouldShowGreetingAsyncAction =

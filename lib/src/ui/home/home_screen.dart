@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 title: _homeStore.shouldShow ? _homeStore.greetingMessage : "",
                 trailingIcon: const Icon(Icons.notifications),
                 trailingFunction: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationScreen()))
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationScreen()))
                 ,
               ),
               body: ObserverNetworkState(

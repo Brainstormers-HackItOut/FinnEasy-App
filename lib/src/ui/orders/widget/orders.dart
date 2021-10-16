@@ -47,7 +47,7 @@ class Orders extends StatelessWidget {
                 ),
                 trailing: IconButton(
                   icon: Icon(
-                    Icons.thumb_up_sharp,
+                    Icons.arrow_forward_ios_outlined,
                     color: Theme.of(context).primaryColor,
                     size: screenWidth * 0.05,
                   ), onPressed: () {
@@ -63,7 +63,7 @@ class Orders extends StatelessWidget {
                   ),
                 ),
                 subtitle:Text(
-                  "${orders[i].quantity!} @ Rs. ${orders[i].stockPrice!}",
+                  "${orders[i].type!} - ${orders[i].quantity!} @ Rs. ${orders[i].stockPrice!}",
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontSize: screenWidth * 0.04,

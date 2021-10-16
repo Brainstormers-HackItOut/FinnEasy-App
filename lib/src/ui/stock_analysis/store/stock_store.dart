@@ -166,7 +166,7 @@ abstract class _StockStore with Store {
             companyName: companyName,
             stockPrice: stockPrice.toString(),
             userId: user_id,
-            type: "BUY",
+            type: "SELL",
             quantity: totalnumofshare
         );
         Stock stock= Stock();

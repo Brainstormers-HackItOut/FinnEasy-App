@@ -1,8 +1,10 @@
-import 'package:finneasy/resources/colors.dart';
-import 'package:finneasy/src/widget/appbar.dart';
-import 'package:finneasy/src/widget/rounded_button.dart';
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'appbar.dart';
+
+import 'package:webview_flutter/webview_flutter.dart';
 
 class WebPageView extends StatefulWidget {
   final String title;
@@ -13,21 +15,64 @@ class WebPageView extends StatefulWidget {
   const WebPageView({Key? key, required this.title, required this.url, this.icon, this.widget}) : super(key: key);
 
   @override
-  _WebPageViewState createState() => _WebPageViewState();
+  WebPageViewState createState() => WebPageViewState();
 }
 
-class _WebPageViewState extends State<WebPageView> {
+class WebPageViewState extends State<WebPageView> {
+  final Completer<WebViewController> _controller = Completer<WebViewController>();
+
+  @override
+  void initState() {
+    super.initState();
+    // Enable hybrid composition.
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    return WebviewScaffold(
-      url: widget.url,
-      withJavascript: true,
-      withZoom: true,
-      appBar: Appbar(
-        title: widget.title,
+    return Scaffold(
+        appBar: Appbar(
+        title: widget.title
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () async{
+        await showDialog(
+            context: context,
+            builder: (context) =>  widget.widget!);
+      },
+      child: Icon(
+          Icons.shopping_bag_outlined
       ),
-        bottomNavigationBar: widget.widget
+    ),
+    body: Stack(
+      children: [
+        WebView(
+          initialUrl: widget.url,
+          javascriptMode: JavascriptMode.unrestricted,
+          onWebViewCreated: (WebViewController webViewController) {
+            _controller.complete(webViewController);
+          },
+          onProgress: (int progress) {
+            print("WebView is loading (progress : $progress%)");
+          },
+          navigationDelegate: (NavigationRequest request) {
+            if (request.url.startsWith('https://www.youtube.com/')) {
+              print('blocking navigation to $request}');
+              return NavigationDecision.prevent;
+            }
+            print('allowing navigation to $request');
+            return NavigationDecision.navigate;
+          },
+          onPageStarted: (String url) {
+            print('Page started loading: $url');
+          },
+          onPageFinished: (String url) {
+            print('Page finished loading: $url');
+          },
+          gestureNavigationEnabled: true,
+          ),
+      ],
+    )
     );
   }
 }

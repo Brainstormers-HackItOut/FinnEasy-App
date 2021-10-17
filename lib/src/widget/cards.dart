@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:finneasy/resources/colors.dart';
+import 'package:finneasy/src/widget/flushbar.dart';
 import 'package:finneasy/src/widget/rounded_button.dart';
 import 'package:flutter/material.dart';
 
@@ -10,8 +11,9 @@ class Cards extends StatelessWidget {
   String text;
   String coins;
   String description;
+  bool isEnabled;
 
-  Cards({required this.color, required this.description, required this.text, required this.coins,});
+  Cards({required this.color, required this.description, required this.text, required this.coins, required this.isEnabled});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,11 @@ class Cards extends StatelessWidget {
           height: screenHeight * 0.08,
           width: screenWidth * 0.15,
           onTap: () {
-
+            if (isEnabled){
+              showFlushBar(context, "Thank You For Redeeming the Gift ...", backgroundColor: AppColors.success, icon: Icons.check);
+            } else{
+              showFlushBar(context, "Invest More to level Up!");
+            }
           },
           color: AppColors.lighten(color, 0.15),
           child: Column(
@@ -73,7 +79,7 @@ class Cards extends StatelessWidget {
                   child: Padding(
                       padding: EdgeInsets.fromLTRB(screenWidth * 0.04, 0, 0, screenWidth * 0.04),
                       child: Text(
-                        text,
+                        text + '\n' + description,
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             color: AppColors.darken(color, 0.2),

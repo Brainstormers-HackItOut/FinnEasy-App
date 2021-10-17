@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'dart:math';
 
+import 'package:finneasy/resources/colors.dart';
 import 'package:finneasy/src/ui/rewards/model/reward.dart';
 import 'package:finneasy/src/widget/cards.dart';
 import 'package:finneasy/src/widget/list_cell.dart';
@@ -9,8 +10,9 @@ import 'package:flutter/material.dart';
 
 class Milestone extends StatefulWidget {
   final List<Reward> rewards;
+  final int currentMileStone;
 
-  Milestone({Key? key, required this.rewards}) : super(key: key);
+  Milestone({Key? key, required this.rewards, required this.currentMileStone}) : super(key: key);
 
  
   @override
@@ -43,10 +45,11 @@ class _MilestoneState extends State<Milestone> {
                     ),
                     itemBuilder: (BuildContext context, int index) {
                       return Cards(
-                          color: Theme.of(context).cardColor,
+                          color: index < widget.currentMileStone ? Theme.of(context).cardColor : AppColors.darken(AppColors.error),
                           text: widget.rewards[index].title.toString(),
                           coins: widget.rewards[index].coins.toString(),
                           description: widget.rewards[index].description!,
+                          isEnabled: index < widget.currentMileStone,
                       );
                     }
 

@@ -46,11 +46,11 @@ class _MilestoneState extends State<Milestone> {
                     itemBuilder: (BuildContext context, int index) {
                       return Cards(
                           image: widget.rewards[index].imageUrl.toString(),
-                          color: index < widget.currentMileStone ? Theme.of(context).cardColor : AppColors.darken(AppColors.error),
+                          color: widget.rewards[index].milestoneNumber! <= widget.currentMileStone ? Theme.of(context).cardColor : AppColors.darken(AppColors.grey),
                           text: widget.rewards[index].title.toString(),
                           coins: widget.rewards[index].coins.toString(),
                           description: widget.rewards[index].description!,
-                          isEnabled: index < widget.currentMileStone,
+                          isEnabled: widget.rewards[index].milestoneNumber! <= widget.currentMileStone,
                       );
                     }
 

@@ -34,7 +34,7 @@ class ShoppingBottomSheet extends StatelessWidget {
     screenWidth = size.width;
     return Observer(
       builder: (context) {
-        return ObserverNetworkState(
+        return store.tweets != null ? ObserverNetworkState(
             networkState: store.isLoading,
             taskToBeDone: AlertDialog(
               title: Text(
@@ -166,7 +166,7 @@ class ShoppingBottomSheet extends StatelessWidget {
                 ),
               ],
             )
-        );
+        ) : const CircularProgressIndicator();
       }
     );
   }

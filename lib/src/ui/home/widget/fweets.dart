@@ -27,54 +27,76 @@ class Fweets extends StatelessWidget {
               for (int i =0; i< blogs.length; i++)
                   Container(
                     width: screenWidth * 0.9,
-                    margin: EdgeInsets.only(top: screenHeight * 0.01, bottom: screenHeight * 0.02),
+                    padding: EdgeInsets.only(top: screenHeight * 0.01, bottom: screenHeight * 0.014),
+                    margin: EdgeInsets.only(top: screenHeight * 0.01, bottom: screenHeight * 0.024),
                     decoration: BoxDecoration(
                       color: Theme.of(context).selectedRowColor,
                       shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(16.0),
+                      borderRadius: BorderRadius.circular(12.0),
                       border: Border.all(
                         width: 1.5,
                         color: AppColors.black
                       ),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Theme.of(context).selectedRowColor,
-                            blurRadius: 0.0,
-                        ),
-                      ]
                   ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      child: Text(
-                          blogs[i].publisher!.split(" ")[0][0].toUpperCase() + blogs[i].publisher!.split(" ")[1][0].toUpperCase()
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            child: Text(
+                                blogs[i].publisher!.split(" ")[0][0].toUpperCase() + blogs[i].publisher!.split(" ")[1][0].toUpperCase()
+                            )
+                          ),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                onPressed: (){
+                                  store.likeDislike(context, i, blogs[i].id!);
+                                },
+                                icon: Icon(
+                                  store.blogLikeDislike[i] ? Icons.star : Icons.star_border,
+                                  color: store.blogLikeDislike[i] ? AppColors.error : AppColors.grey,
+                                  size: screenWidth * 0.055,
+                                ),
+                              ),
+                            ],
+                          ),
+                          title: Text(
+                            blogs[i].title!,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: screenWidth * 0.05,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle:RichText(
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: blogs[i].body! + "\n",
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: screenWidth * 0.045,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "By - " + blogs[i].publisher! ,
+                                  style: TextStyle(
+                                    color: Theme.of(context).errorColor,
+                                    fontSize: screenWidth * 0.03,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ),
                       )
-                    ),
-                    trailing: IconButton(
-                      onPressed: (){
-                        store.likeDislike(context, i, blogs[i].id!);
-                      },
-                      icon: Icon(
-                        store.blogLikeDislike[i] ? Icons.thumb_up_alt_outlined : Icons.thumb_down_alt_outlined,
-                        color: store.blogLikeDislike[i] ? AppColors.error : AppColors.grey,
-                        size: screenWidth * 0.05,
-                      ),
-                    ),
-                    title: Text(
-                      blogs[i].title!,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: screenWidth * 0.05,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle:Text(
-                      "By - " + blogs[i].publisher! + "\n" + blogs[i].body!,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: screenWidth * 0.04,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
+                    ],
                   ),
               ),
             ]

@@ -143,7 +143,7 @@ class _RewardsScreenState extends State<RewardsScreen> with TickerProviderStateM
                             scrollDirection: Axis.horizontal,
                             builder: TimelineTileBuilder.fromStyle(
                               contentsBuilder: (context, index) => Card(
-                                color: index < _homeStore.user.milestoneNumber! ? Theme.of(context).cardColor : AppColors.darken(AppColors.error),
+                                color: _homeStore.user.milestoneNumber! >= _rewardsStore.rewards[index].milestoneNumber! ? Theme.of(context).cardColor : AppColors.darken(AppColors.grey),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(_rewardsStore.rewards[index].title.toString(), style: TextStyle(color: AppColors.white)),
@@ -170,7 +170,7 @@ class _RewardsScreenState extends State<RewardsScreen> with TickerProviderStateM
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Milestone(rewards: _rewardsStore.rewards, currentMileStone: _homeStore.user.milestoneNumber!),
+                      Milestone(rewards: _rewardsStore.rewards, currentMileStone: _homeStore.user.milestoneNumber!,),
                     ],
                   ),
                 ),

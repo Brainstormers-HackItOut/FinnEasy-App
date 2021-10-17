@@ -44,7 +44,7 @@ class _NewsState extends State<News> {
             padding: const EdgeInsets.all(15.0),
             child: Column(
               children: [
-                 for(int i = 0; i < min(widget.news.totalResults!, 10); i++)
+                 for(int i = 0; i < min(widget.news.totalResults!, 5); i++)
                   ListCell(
                     image_url: widget.news.articles![i].urlToImage!,
                     headline: widget.news.articles![i].title!,

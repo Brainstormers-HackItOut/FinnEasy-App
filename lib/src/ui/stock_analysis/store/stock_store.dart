@@ -139,7 +139,7 @@ abstract class _StockStore with Store {
           sharesbought = sharesbought + totalnumofshare;
           number_of_shares = userwealth ~/ price;
           if (stock.reward != null){
-            showRewardDialog(context, stock.reward!);
+            showRewardDialog(context, stock.reward!.coins!);
           }
           _showFlushbar();
         } else {
@@ -181,7 +181,7 @@ abstract class _StockStore with Store {
         }
 
         if (stock.reward != null){
-          showRewardDialog(context, stock.reward!);
+          showRewardDialog(context, stock.reward!.coins!);
         }
 
         userwealth =

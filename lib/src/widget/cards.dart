@@ -12,8 +12,9 @@ class Cards extends StatelessWidget {
   String coins;
   String description;
   bool isEnabled;
+  String image;
 
-  Cards({required this.color, required this.description, required this.text, required this.coins, required this.isEnabled});
+  Cards({required this.color, required this.description, required this.text, required this.coins, required this.isEnabled, required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class Cards extends StatelessWidget {
           borderRadius:
           BorderRadius.circular(screenWidth * 0.05),
           borderColor: Theme.of(context).secondaryHeaderColor,
-          height: screenHeight * 0.08,
+          height: screenHeight * 0.15,
           width: screenWidth * 0.15,
           onTap: () {
             if (isEnabled){
@@ -49,15 +50,13 @@ class Cards extends StatelessWidget {
                     margin: EdgeInsets.fromLTRB(0, screenWidth * 0.04, screenWidth * 0.04,0),
                     padding: EdgeInsets.all(screenWidth * 0.04),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          AppColors.darken(color, 0.1),
-                          color,
-                          AppColors.lighten(color, 0.1),
-                          AppColors.white
-                        ],
-                        begin: Alignment.bottomRight,
-                        end: Alignment.topLeft,
+                      image: DecorationImage(
+                          image: NetworkImage(
+                            image
+                          ),
+                        fit: BoxFit.fill,
+                        colorFilter: new ColorFilter.mode(color.withOpacity(0.6), BlendMode.dstATop),
+
                       ),
                       border: Border.all(color: AppColors.white),
                       borderRadius: BorderRadius.all(
@@ -79,11 +78,11 @@ class Cards extends StatelessWidget {
                   child: Padding(
                       padding: EdgeInsets.fromLTRB(screenWidth * 0.04, 0, 0, screenWidth * 0.04),
                       child: Text(
-                        text + '\n' + description,
+                        text + '\n-' + description,
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             color: AppColors.darken(color, 0.2),
-                            fontSize: screenWidth * 0.045,
+                            fontSize: screenWidth * 0.040,
                             fontWeight: FontWeight.w800),
                       )
                   )

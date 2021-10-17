@@ -195,15 +195,6 @@ abstract class _LoginStore with Store {
     }
     else{
       RegisterForm registerForm ;
-      if (referralController.text.isNotEmpty) {
-        registerForm = RegisterForm(
-            phoneNumber: mobile,
-            password: password,
-            emailId: email,
-            firstName: username.split(" ")[0],
-            lastName: username.split(" ")[1],
-            referralCode: referralController.text.toString());
-      } else {
         registerForm = RegisterForm(
           phoneNumber: mobile,
           password: password,
@@ -211,7 +202,6 @@ abstract class _LoginStore with Store {
           firstName: username.split(" ")[0],
           lastName: username.split(" ")[1],
         );
-      }
       final loginForm = LoginForm(
           phoneNumber: mobile,
           password: password,

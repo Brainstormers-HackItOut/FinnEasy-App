@@ -39,12 +39,13 @@ class _MilestoneState extends State<Milestone> {
                     padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.035, vertical: screenHeight * 0.035),
                     shrinkWrap: true,
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: screenWidth * 0.42,
-                      mainAxisSpacing: screenHeight * 0.035,
+                      maxCrossAxisExtent: screenWidth * 0.55,
+                      mainAxisSpacing: screenHeight * 0.025,
                       crossAxisSpacing: screenHeight * 0.035,
                     ),
                     itemBuilder: (BuildContext context, int index) {
                       return Cards(
+                          image: widget.rewards[index].imageUrl.toString(),
                           color: index < widget.currentMileStone ? Theme.of(context).cardColor : AppColors.darken(AppColors.error),
                           text: widget.rewards[index].title.toString(),
                           coins: widget.rewards[index].coins.toString(),
